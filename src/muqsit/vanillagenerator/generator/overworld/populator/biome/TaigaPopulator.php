@@ -10,10 +10,11 @@ use muqsit\vanillagenerator\generator\overworld\biome\BiomeIds;
 use muqsit\vanillagenerator\generator\overworld\decorator\MushroomDecorator;
 use muqsit\vanillagenerator\generator\overworld\decorator\types\DoublePlantDecoration;
 use muqsit\vanillagenerator\generator\overworld\decorator\types\TreeDecoration;
-use pocketmine\block\VanillaBlocks;
+use pocketmine\block\BlockFactory;
+use pocketmine\block\BlockIds;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
 class TaigaPopulator extends BiomePopulator{
 
@@ -26,7 +27,7 @@ class TaigaPopulator extends BiomePopulator{
 	public static function init() : void{
 		parent::init();
 		self::$DOUBLE_PLANTS = [
-			new DoublePlantDecoration(VanillaBlocks::LARGE_FERN(), 1)
+			new DoublePlantDecoration(BlockFactory::get(BlockIds::DOUBLE_PLANT, 3), 1)
 		];
 	}
 
@@ -44,8 +45,8 @@ class TaigaPopulator extends BiomePopulator{
 	protected $taigaRedMushroomDecorator;
 
 	public function __construct(){
-		$this->taigaBrownMushroomDecorator = new MushroomDecorator(VanillaBlocks::BROWN_MUSHROOM());
-		$this->taigaRedMushroomDecorator = new MushroomDecorator(VanillaBlocks::RED_MUSHROOM());
+		$this->taigaBrownMushroomDecorator = new MushroomDecorator(BlockFactory::get(BlockIds::BROWN_MUSHROOM));
+		$this->taigaRedMushroomDecorator = new MushroomDecorator(BlockFactory::get(BlockIds::RED_MUSHROOM));
 		parent::__construct();
 	}
 

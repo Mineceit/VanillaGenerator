@@ -10,10 +10,11 @@ use muqsit\vanillagenerator\generator\overworld\decorator\MushroomDecorator;
 use muqsit\vanillagenerator\generator\overworld\decorator\types\FlowerDecoration;
 use muqsit\vanillagenerator\generator\overworld\decorator\types\TreeDecoration;
 use muqsit\vanillagenerator\generator\overworld\decorator\WaterLilyDecorator;
-use pocketmine\block\VanillaBlocks;
+use pocketmine\block\BlockFactory;
+use pocketmine\block\BlockIds;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
 class SwamplandPopulator extends BiomePopulator{
 
@@ -31,7 +32,7 @@ class SwamplandPopulator extends BiomePopulator{
 
 	protected static function initFlowers() : void{
 		self::$FLOWERS = [
-			new FlowerDecoration(VanillaBlocks::BLUE_ORCHID(), 1)
+			new FlowerDecoration(BlockFactory::get(BlockIds::POPPY, 1), 1)
 		];
 	}
 
@@ -45,8 +46,8 @@ class SwamplandPopulator extends BiomePopulator{
 	private $waterlilyDecorator;
 
 	public function __construct(){
-		$this->swamplandBrownMushroomDecorator = new MushroomDecorator(VanillaBlocks::BROWN_MUSHROOM());
-		$this->swamplandRedMushroomDecorator = new MushroomDecorator(VanillaBlocks::RED_MUSHROOM());
+		$this->swamplandBrownMushroomDecorator = new MushroomDecorator(BlockFactory::get(BlockIds::BROWN_MUSHROOM));
+		$this->swamplandRedMushroomDecorator = new MushroomDecorator(BlockFactory::get(BlockIds::RED_MUSHROOM));
 		$this->waterlilyDecorator = new WaterLilyDecorator();
 		parent::__construct();
 	}

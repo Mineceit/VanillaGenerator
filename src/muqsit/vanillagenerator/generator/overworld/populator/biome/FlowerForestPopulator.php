@@ -9,10 +9,11 @@ use muqsit\vanillagenerator\generator\noise\glowstone\SimplexOctaveGenerator;
 use muqsit\vanillagenerator\generator\object\Flower;
 use muqsit\vanillagenerator\generator\overworld\biome\BiomeIds;
 use pocketmine\block\Block;
-use pocketmine\block\VanillaBlocks;
+use pocketmine\block\BlockFactory;
+use pocketmine\block\BlockIds;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
 class FlowerForestPopulator extends ForestPopulator{
 
@@ -21,16 +22,9 @@ class FlowerForestPopulator extends ForestPopulator{
 
 	protected static function initFlowers() : void{
 		self::$FLOWERS = [
-			VanillaBlocks::POPPY(),
-			VanillaBlocks::POPPY(),
-			VanillaBlocks::DANDELION(),
-			VanillaBlocks::ALLIUM(),
-			VanillaBlocks::AZURE_BLUET(),
-			VanillaBlocks::RED_TULIP(),
-			VanillaBlocks::ORANGE_TULIP(),
-			VanillaBlocks::WHITE_TULIP(),
-			VanillaBlocks::PINK_TULIP(),
-			VanillaBlocks::OXEYE_DAISY()
+			BlockFactory::get(BlockIds::POPPY),
+			BlockFactory::get(BlockIds::POPPY),
+			BlockFactory::get(BlockIds::DANDELION),
 		];
 	}
 

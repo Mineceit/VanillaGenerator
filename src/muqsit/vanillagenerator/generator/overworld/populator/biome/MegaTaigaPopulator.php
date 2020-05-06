@@ -12,8 +12,8 @@ use muqsit\vanillagenerator\generator\overworld\biome\BiomeIds;
 use muqsit\vanillagenerator\generator\overworld\decorator\StoneBoulderDecorator;
 use muqsit\vanillagenerator\generator\overworld\decorator\types\TreeDecoration;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
 class MegaTaigaPopulator extends TaigaPopulator{
 

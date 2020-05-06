@@ -9,8 +9,8 @@ use muqsit\vanillagenerator\generator\object\Flower;
 use muqsit\vanillagenerator\generator\overworld\decorator\types\FlowerDecoration;
 use pocketmine\block\Block;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
 class FlowerDecorator extends Decorator{
 

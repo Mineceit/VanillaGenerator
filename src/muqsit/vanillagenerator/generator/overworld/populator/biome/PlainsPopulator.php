@@ -11,10 +11,11 @@ use muqsit\vanillagenerator\generator\object\Flower;
 use muqsit\vanillagenerator\generator\object\TallGrass;
 use muqsit\vanillagenerator\generator\overworld\biome\BiomeIds;
 use pocketmine\block\Block;
-use pocketmine\block\VanillaBlocks;
+use pocketmine\block\BlockFactory;
+use pocketmine\block\BlockIds;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
 class PlainsPopulator extends BiomePopulator{
 
@@ -28,16 +29,16 @@ class PlainsPopulator extends BiomePopulator{
 		parent::init();
 
 		self::$PLAINS_FLOWERS = [
-			VanillaBlocks::POPPY(),
-			VanillaBlocks::AZURE_BLUET(),
-			VanillaBlocks::OXEYE_DAISY()
+			BlockFactory::get(BlockIds::POPPY),
+			BlockFactory::get(BlockIds::POPPY, 3),
+			BlockFactory::get(BlockIds::POPPY, 8)
 		];
 
 		self::$PLAINS_TULIPS = [
-			VanillaBlocks::RED_TULIP(),
-			VanillaBlocks::ORANGE_TULIP(),
-			VanillaBlocks::WHITE_TULIP(),
-			VanillaBlocks::PINK_TULIP()
+			BlockFactory::get(BlockIds::POPPY, 4),
+			BlockFactory::get(BlockIds::POPPY, 5),
+			BlockFactory::get(BlockIds::POPPY, 6),
+			BlockFactory::get(BlockIds::POPPY, 7)
 		];
 	}
 
@@ -72,7 +73,7 @@ class PlainsPopulator extends BiomePopulator{
 				$x = $sourceX + $random->nextBoundedInt(16);
 				$z = $sourceZ + $random->nextBoundedInt(16);
 				$y = $random->nextBoundedInt($chunk->getHighestBlockAt($x & 0x0f, $z & 0x0f) + 32);
-				(new DoubleTallPlant(VanillaBlocks::DOUBLE_TALLGRASS()))->generate($world, $random, $x, $y, $z);
+				(new DoubleTallPlant(BlockFactory::get(BlockIds::TALL_GRASS)))->generate($world, $random, $x, $y, $z);
 			}
 		}
 
@@ -81,7 +82,7 @@ class PlainsPopulator extends BiomePopulator{
 		}elseif($random->nextBoundedInt(3) > 0){
 			$flower = self::$PLAINS_FLOWERS[$random->nextBoundedInt(count(self::$PLAINS_FLOWERS))];
 		}else{
-			$flower = VanillaBlocks::DANDELION();
+			$flower = BlockFactory::get(BlockIds::DANDELION);
 		}
 
 		for($i = 0; $i < $flowerAmount; ++$i){
@@ -95,7 +96,7 @@ class PlainsPopulator extends BiomePopulator{
 			$x = $sourceX + $random->nextBoundedInt(16);
 			$z = $sourceZ + $random->nextBoundedInt(16);
 			$y = $random->nextBoundedInt($chunk->getHighestBlockAt($x & 0x0f, $z & 0x0f) << 1);
-			(new TallGrass(VanillaBlocks::TALL_GRASS()))->generate($world, $random, $x, $y, $z);
+			(new TallGrass(BlockFactory::get(BlockIds::TALL_GRASS)))->generate($world, $random, $x, $y, $z);
 		}
 
 		parent::populateOnGround($world, $random, $chunk);

@@ -12,8 +12,8 @@ use muqsit\vanillagenerator\generator\overworld\biome\BiomeIds;
 use muqsit\vanillagenerator\generator\overworld\decorator\MelonDecorator;
 use muqsit\vanillagenerator\generator\overworld\decorator\types\TreeDecoration;
 use pocketmine\utils\Random;
-use pocketmine\world\BlockTransaction;
-use pocketmine\world\ChunkManager;
+use pocketmine\block\BlockTransaction;
+use pocketmine\level\ChunkManager;
 use pocketmine\world\format\Chunk;
 
 class JunglePopulator extends BiomePopulator{

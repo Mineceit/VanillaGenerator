@@ -9,7 +9,8 @@ use muqsit\vanillagenerator\generator\object\tree\GenericTree;
 use muqsit\vanillagenerator\generator\overworld\biome\BiomeIds;
 use muqsit\vanillagenerator\generator\overworld\decorator\types\DoublePlantDecoration;
 use muqsit\vanillagenerator\generator\overworld\decorator\types\TreeDecoration;
-use pocketmine\block\VanillaBlocks;
+use pocketmine\block\BlockFactory;
+use pocketmine\block\BlockIds;
 
 class SavannaPopulator extends BiomePopulator{
 
@@ -22,7 +23,7 @@ class SavannaPopulator extends BiomePopulator{
 	public static function init() : void{
 		parent::init();
 		self::$DOUBLE_PLANTS = [
-			new DoublePlantDecoration(VanillaBlocks::TALL_GRASS(), 1)
+			new DoublePlantDecoration(BlockFactory::get(BlockIds::TALL_GRASS), 1)
 		];
 	}
 

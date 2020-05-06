@@ -17,8 +17,12 @@ abstract class VanillaGenerator extends Generator
 {
 
 	protected const WORLD_DEPTH = 128;
+	
+	private static $GAUSSIAN_KERNEL = null;
+	private static $SMOOTH_SIZE = 2;
 
-	private static function modifyChunkManager(SimpleChunkManager $world, self $generator) : SimpleChunkManager{
+	private static function modifyChunkManager(SimpleChunkManager $world, self $generator) : SimpleChunkManager
+	{
 		static $_worldHeight = null;
 		if($_worldHeight === null){
 			/** @noinspection PhpUnhandledExceptionInspection */
@@ -39,10 +43,31 @@ abstract class VanillaGenerator extends Generator
 	/** @var MapLayer[] */
 	private $biomeGrid;
 
-	public function __construct(ChunkManager $world, int $seed, array $options = []){
-		assert($world instanceof SimpleChunkManager);
-		parent::__construct(self::modifyChunkManager($world, $this), $seed, $options);
-		$this->biomeGrid = MapLayer::initialize($seed, Environment::OVERWORLD, WorldType::NORMAL);
+	public function __construct(array $options = []){
+//		assert($this->world instanceof SimpleChunkManager);
+//		parent::__construct($options);
+//		$this->biomeGrid = MapLayer::initialize($seed, Environment::OVERWORLD, WorldType::NORMAL);
+
+		if(self::$GAUSSIAN_KERNEL === null){
+			self::generateKernel();
+		}
+	}
+
+	private static function generateKernel() : void{
+		self::$GAUSSIAN_KERNEL = [];
+
+		$bellSize = 1 / self::$SMOOTH_SIZE;
+		$bellHeight = 2 * self::$SMOOTH_SIZE;
+
+		for($sx = -self::$SMOOTH_SIZE; $sx <= self::$SMOOTH_SIZE; ++$sx){
+			self::$GAUSSIAN_KERNEL[$sx + self::$SMOOTH_SIZE] = [];
+
+			for($sz = -self::$SMOOTH_SIZE; $sz <= self::$SMOOTH_SIZE; ++$sz){
+				$bx = $bellSize * $sx;
+				$bz = $bellSize * $sz;
+				self::$GAUSSIAN_KERNEL[$sx + self::$SMOOTH_SIZE][$sz + self::$SMOOTH_SIZE] = $bellHeight * exp(-($bx * $bx + $bz * $bz) / 2);
+			}
+		}
 	}
 
 	/**
@@ -108,11 +133,11 @@ abstract class VanillaGenerator extends Generator
 
 	final public function populateChunk(int $chunkX, int $chunkZ) : void{
 		foreach($this->populators as $populator){
-			$populator->populate($this->world, $this->random, $this->world->getChunk($chunkX, $chunkZ));
+			$populator->populate($this->level, $this->random, $this->level->getChunk($chunkX, $chunkZ));
 		}
 	}
 
 	public function getWorldHeight() : int{
-		return World::Y_MAX;
+		return Level::Y_MAX;
 	}
 }

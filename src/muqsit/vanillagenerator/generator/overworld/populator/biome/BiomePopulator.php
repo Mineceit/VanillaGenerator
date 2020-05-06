@@ -22,13 +22,13 @@ use muqsit\vanillagenerator\generator\overworld\decorator\types\TreeDecoration;
 use muqsit\vanillagenerator\generator\overworld\decorator\UnderwaterDecorator;
 use muqsit\vanillagenerator\generator\Populator;
 use pocketmine\block\BlockFactory;
-use pocketmine\block\BlockLegacyIds;
-use pocketmine\block\VanillaBlocks;
+use pocketmine\block\BlockIds;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
-class BiomePopulator implements Populator{
+class BiomePopulator implements Populator
+{
 
 	/** @var TreeDecoration[] */
 	protected static $TREES;
@@ -50,8 +50,8 @@ class BiomePopulator implements Populator{
 
 	protected static function initFlowers() : void{
 		self::$FLOWERS = [
-			new FlowerDecoration(VanillaBlocks::DANDELION(), 2),
-			new FlowerDecoration(VanillaBlocks::POPPY(), 1)
+			new FlowerDecoration(BlockFactory::get(BlockIds::DANDELION), 2),
+			new FlowerDecoration(BlockFactory::get(BlockIds::POPPY), 1)
 		];
 	}
 
@@ -117,21 +117,21 @@ class BiomePopulator implements Populator{
 	 * wells; and vegetation.
 	 */
 	public function __construct(){
-		$block_factory = BlockFactory::getInstance();
+		$block_factory = new BlockFactory();
 
-		$this->waterLakeDecorator = new LakeDecorator($block_factory->get(BlockLegacyIds::STILL_WATER), 4);
-		$this->lavaLakeDecorator = new LakeDecorator($block_factory->get(BlockLegacyIds::STILL_LAVA), 8, 8);
+		$this->waterLakeDecorator = new LakeDecorator($block_factory->get(BlockIds::STILL_WATER), 4);
+		$this->lavaLakeDecorator = new LakeDecorator($block_factory->get(BlockIds::STILL_LAVA), 8, 8);
 		$this->orePopulator = new OrePopulator();
-		$this->sandPatchDecorator = new UnderwaterDecorator(VanillaBlocks::SAND());
-		$this->clayPatchDecorator = new UnderwaterDecorator(VanillaBlocks::CLAY());
-		$this->gravelPatchDecorator = new UnderwaterDecorator(VanillaBlocks::GRAVEL());
+		$this->sandPatchDecorator = new UnderwaterDecorator($block_factory->get(BlockIds::SAND));
+		$this->clayPatchDecorator = new UnderwaterDecorator($block_factory->get(BlockIds::CLAY_BLOCK));
+		$this->gravelPatchDecorator = new UnderwaterDecorator($block_factory->get(BlockIds::GRAVEL));
 		$this->doublePlantDecorator = new DoublePlantDecorator();
 		$this->treeDecorator = new TreeDecorator();
 		$this->flowerDecorator = new FlowerDecorator();
 		$this->tallGrassDecorator = new TallGrassDecorator();
 		$this->deadBushDecorator = new DeadBushDecorator();
-		$this->brownMushroomDecorator = new MushroomDecorator(VanillaBlocks::BROWN_MUSHROOM());
-		$this->redMushroomDecorator = new MushroomDecorator(VanillaBlocks::RED_MUSHROOM());
+		$this->brownMushroomDecorator = new MushroomDecorator($block_factory->get(BlockIds::RED_MUSHROOM));
+		$this->redMushroomDecorator = new MushroomDecorator($block_factory->get(BlockIds::BROWN_MUSHROOM));
 		$this->sugarCaneDecorator = new SugarCaneDecorator();
 		$this->pumpkinDecorator = new PumpkinDecorator();
 		$this->cactusDecorator = new CactusDecorator();
@@ -169,13 +169,13 @@ class BiomePopulator implements Populator{
 		$this->surfaceCaveDecorator->setAmount(1);
 		$this->sandPatchDecorator->setAmount(3);
 		$this->sandPatchDecorator->setRadii(7, 2);
-		$this->sandPatchDecorator->setOverridableBlocks(VanillaBlocks::DIRT(), VanillaBlocks::GRASS());
+		$this->sandPatchDecorator->setOverridableBlocks(BlockFactory::get(BlockIds::DIRT), BlockFactory::get(BlockIds::GRASS));
 		$this->clayPatchDecorator->setAmount(1);
 		$this->clayPatchDecorator->setRadii(4, 1);
-		$this->clayPatchDecorator->setOverridableBlocks(VanillaBlocks::DIRT());
+		$this->clayPatchDecorator->setOverridableBlocks(BlockFactory::get(BlockIds::DIRT));
 		$this->gravelPatchDecorator->setAmount(1);
 		$this->gravelPatchDecorator->setRadii(6, 2);
-		$this->gravelPatchDecorator->setOverridableBlocks(VanillaBlocks::DIRT(), VanillaBlocks::GRASS());
+		$this->gravelPatchDecorator->setOverridableBlocks(BlockFactory::get(BlockIds::DIRT), BlockFactory::get(BlockIds::GRASS));
 
 		$this->doublePlantDecorator->setAmount(0);
 		$this->treeDecorator->setAmount(PHP_INT_MIN);

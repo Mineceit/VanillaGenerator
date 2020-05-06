@@ -6,11 +6,11 @@ namespace muqsit\vanillagenerator\generator\overworld\decorator;
 
 use muqsit\vanillagenerator\generator\Decorator;
 use muqsit\vanillagenerator\generator\noise\glowstone\PerlinOctaveGenerator;
-use pocketmine\block\VanillaBlocks;
+use pocketmine\block\BlockIds;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
 class SurfaceCaveDecorator extends Decorator{
 
@@ -68,7 +68,7 @@ class SurfaceCaveDecorator extends Decorator{
 				for($z = $blockZ - $radius; $z <= $blockZ + $radius; ++$z){
 					$distanceSquared = ($blockX - $x) * ($blockX - $x) + ($blockY - $y) * ($blockY - $y) + ($blockZ - $z) * ($blockZ - $z);
 					if($distanceSquared < $radius * $radius){
-						$world->setBlockAt($x, $y, $z, VanillaBlocks::AIR());
+						$world->setBlockIdAt($x, $y, $z, BlockIds::AIR);
 					}
 				}
 			}

@@ -27,8 +27,8 @@ use muqsit\vanillagenerator\generator\overworld\populator\biome\SwamplandPopulat
 use muqsit\vanillagenerator\generator\overworld\populator\biome\TaigaPopulator;
 use muqsit\vanillagenerator\generator\Populator;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 use ReflectionClass;
 
 class OverworldPopulator implements Populator{

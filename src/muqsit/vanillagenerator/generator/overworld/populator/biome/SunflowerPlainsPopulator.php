@@ -6,7 +6,8 @@ namespace muqsit\vanillagenerator\generator\overworld\populator\biome;
 
 use muqsit\vanillagenerator\generator\overworld\biome\BiomeIds;
 use muqsit\vanillagenerator\generator\overworld\decorator\types\DoublePlantDecoration;
-use pocketmine\block\VanillaBlocks;
+use pocketmine\block\BlockFactory;
+use pocketmine\block\BlockIds;
 
 class SunflowerPlainsPopulator extends PlainsPopulator{
 
@@ -16,7 +17,7 @@ class SunflowerPlainsPopulator extends PlainsPopulator{
 	public static function init() : void{
 		parent::init();
 		self::$DOUBLE_PLANTS = [
-			new DoublePlantDecoration(VanillaBlocks::SUNFLOWER(), 1)
+			new DoublePlantDecoration(BlockFactory::get(BlockIds::DOUBLE_PLANT), 1)
 		];
 	}
 

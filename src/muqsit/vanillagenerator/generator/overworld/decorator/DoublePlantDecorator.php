@@ -9,8 +9,8 @@ use muqsit\vanillagenerator\generator\object\DoubleTallPlant;
 use muqsit\vanillagenerator\generator\overworld\decorator\types\DoublePlantDecoration;
 use pocketmine\block\Block;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
 class DoublePlantDecorator extends Decorator{
 

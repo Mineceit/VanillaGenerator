@@ -22,14 +22,16 @@ use muqsit\vanillagenerator\generator\overworld\populator\OverworldPopulator;
 use muqsit\vanillagenerator\generator\overworld\populator\SnowPopulator;
 use muqsit\vanillagenerator\generator\VanillaBiomeGrid;
 use muqsit\vanillagenerator\generator\VanillaGenerator;
+use pocketmine\block\Block;
 use pocketmine\block\BlockFactory;
-use pocketmine\block\BlockLegacyIds;
-use pocketmine\block\VanillaBlocks;
+use pocketmine\block\BlockIds;
+use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
-class OverworldGenerator extends VanillaGenerator{
+class OverworldGenerator extends VanillaGenerator
+{
 
 	/** @var float[][] */
 	private static $ELEVATION_WEIGHT = [];
@@ -37,7 +39,14 @@ class OverworldGenerator extends VanillaGenerator{
 	/** @var GroundGenerator[] */
 	private static $GROUND_MAP = [];
 
-	public static function init() : void{
+	/** @var array */
+	private $settings = [];
+	/** @var string */
+	private $name = "";
+	/** @var Vector3 */
+	private $spawn = null;
+
+	public function init(ChunkManager $manager, Random $random) : void{
 		self::setBiomeSpecificGround(new SandyGroundGenerator(), BiomeIds::BEACH, BiomeIds::COLD_BEACH, BiomeIds::DESERT, BiomeIds::DESERT_HILLS, BiomeIds::MUTATED_DESERT);
 		self::setBiomeSpecificGround(new RockyGroundGenerator(), BiomeIds::STONE_BEACH);
 		self::setBiomeSpecificGround(new SnowyGroundGenerator(), BiomeIds::MUTATED_ICE_FLATS);
@@ -98,8 +107,12 @@ class OverworldGenerator extends VanillaGenerator{
 	/** @var string */
 	private $type = WorldType::NORMAL;
 
-	public function __construct(ChunkManager $world, int $seed, array $options = []){
-		parent::__construct($world, $seed, $options);
+	public function __construct(array $options = []){
+		parent::__construct($options);
+
+		$this->settings = $options;
+		$this->spawn = new Vector3(0, 80, 0);
+		
 		$this->groundGen = new GroundGenerator();
 		$this->addPopulators(new OverworldPopulator(), new SnowPopulator());
 	}
@@ -118,15 +131,15 @@ class OverworldGenerator extends VanillaGenerator{
 		$surfaceNoise = $octaveGenerator->getFractalBrownianMotion($cx, 0.0, $cz, 0.5, 0.5);
 
 		/** @var Chunk $chunk */
-		$chunk = $this->world->getChunk($chunkX, $chunkZ);
+		$chunk = $this->level->getChunk($chunkX, $chunkZ);
 
 		for($x = 0; $x < $sizeX; ++$x){
 			for($z = 0; $z < $sizeZ; ++$z){
 				$chunk->setBiomeId($x, $z, $id = $grid->getBiome($x, $z));
 				if(isset(self::$GROUND_MAP[$id])){
-					self::$GROUND_MAP[$id]->generateTerrainColumn($this->world, $this->random, $cx + $x, $cz + $z, $id, $surfaceNoise[$x | $z << 4]);
+					self::$GROUND_MAP[$id]->generateTerrainColumn($this->level, $this->random, $cx + $x, $cz + $z, $id, $surfaceNoise[$x | $z << 4]);
 				}else{
-					$this->groundGen->generateTerrainColumn($this->world, $this->random, $cx + $x, $cz + $z, $id, $surfaceNoise[$x | $z << 4]);
+					$this->groundGen->generateTerrainColumn($this->level, $this->random, $cx + $x, $cz + $z, $id, $surfaceNoise[$x | $z << 4]);
 				}
 			}
 		}
@@ -179,8 +192,6 @@ class OverworldGenerator extends VanillaGenerator{
 		$x = $chunkX << 4;
 		$z = $chunkZ << 4;
 
-		$block_factory = BlockFactory::getInstance();
-
 		for($i = 0; $i < 5 - 1; ++$i){
 			for($j = 0; $j < 5 - 1; ++$j){
 				for($k = 0; $k < 33 - 1; ++$k){
@@ -211,23 +222,23 @@ class OverworldGenerator extends VanillaGenerator{
 								// the target is densityOffset + 0, since the default target is
 								// 0, so don't get too confused by the naming :)
 								if($afill === 1 || $afill === 10 || $afill === 13 || $afill === 16){
-									$this->world->setBlockAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), VanillaBlocks::WATER());
+									$this->level->setBlockIdAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), BlockIds::WATER);
 								}elseif($afill === 2 || $afill === 9 || $afill === 12 || $afill === 15){
-									$this->world->setBlockAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), VanillaBlocks::STONE());
+									$this->level->setBlockIdAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), BlockIds::STONE);
 								}
 
 								if(($dens > $densityOffset && $fill > -1) || ($dens <= $densityOffset && $fill < 0)){
 									if($afill === 0 || $afill === 3 || $afill === 6 || $afill === 9 || $afill === 12){
-										$this->world->setBlockAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), VanillaBlocks::STONE());
+										$this->level->setBlockIdAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), BlockIds::STONE);
 									}elseif($afill === 2 || $afill === 7 || $afill === 10 || $afill === 16){
-										$this->world->setBlockAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), $block_factory->get(BlockLegacyIds::STILL_WATER));
+										$this->level->setBlockIdAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), BlockIds::STILL_WATER);
 									}
 								}elseif(($l + ($k << 3) < $seaLevel - 1 && $seaFill === 0) || ($l + ($k << 3) >= $seaLevel - 1 && $seaFill === 1)){
 									if($afill === 0 || $afill === 3 || $afill === 7 || $afill === 10 || $afill === 13){
-										$this->world->setBlockAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), $block_factory->get(BlockLegacyIds::STILL_WATER));
+										$this->level->setBlockIdAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), BlockIds::STILL_WATER);
 									}elseif($afill === 1 || $afill === 6 || $afill === 9
 										|| $afill === 15){
-										$this->world->setBlockAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), VanillaBlocks::STONE());
+										$this->level->setBlockIdAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), BlockIds::STONE);
 									}
 								}
 
@@ -368,6 +379,19 @@ class OverworldGenerator extends VanillaGenerator{
 			}
 		}
 	}
-}
 
-OverworldGenerator::init();
+	public function getSettings(): array
+	{
+		return $this->settings;
+	}
+
+	public function getName(): string
+	{
+		return $this->name;
+	}
+
+	public function getSpawn(): Vector3
+	{
+		return $this->spawn;
+	}
+}

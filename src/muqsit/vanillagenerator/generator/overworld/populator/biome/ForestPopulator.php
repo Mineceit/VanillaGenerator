@@ -10,12 +10,14 @@ use muqsit\vanillagenerator\generator\object\tree\GenericTree;
 use muqsit\vanillagenerator\generator\overworld\biome\BiomeIds;
 use muqsit\vanillagenerator\generator\overworld\decorator\types\TreeDecoration;
 use pocketmine\block\Block;
-use pocketmine\block\VanillaBlocks;
+use pocketmine\block\BlockFactory;
+use pocketmine\block\BlockIds;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
-class ForestPopulator extends BiomePopulator{
+class ForestPopulator extends BiomePopulator
+{
 
 	private const BIOMES = [BiomeIds::FOREST, BiomeIds::FOREST_HILLS];
 
@@ -27,11 +29,7 @@ class ForestPopulator extends BiomePopulator{
 
 	public static function init() : void{
 		parent::init();
-		self::$DOUBLE_PLANTS = [
-			VanillaBlocks::LILAC(),
-			VanillaBlocks::ROSE_BUSH(),
-			VanillaBlocks::PEONY()
-		];
+		self::$DOUBLE_PLANTS = [];
 	}
 
 	protected static function initTrees() : void{
