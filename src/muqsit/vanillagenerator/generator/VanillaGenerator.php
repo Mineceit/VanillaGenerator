@@ -7,13 +7,14 @@ namespace muqsit\vanillagenerator\generator;
 use muqsit\vanillagenerator\generator\biomegrid\MapLayer;
 use muqsit\vanillagenerator\generator\noise\bukkit\OctaveGenerator;
 use muqsit\vanillagenerator\generator\overworld\WorldType;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\generator\Generator;
-use pocketmine\world\SimpleChunkManager;
-use pocketmine\world\World;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\generator\Generator;
+use pocketmine\level\SimpleChunkManager;
+use pocketmine\level\Level;
 use ReflectionProperty;
 
-abstract class VanillaGenerator extends Generator{
+abstract class VanillaGenerator extends Generator
+{
 
 	protected const WORLD_DEPTH = 128;
 
