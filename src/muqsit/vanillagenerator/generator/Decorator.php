@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace muqsit\vanillagenerator\generator;
 
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
 abstract class Decorator implements Populator{
 
