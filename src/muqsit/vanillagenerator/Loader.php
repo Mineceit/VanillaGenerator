@@ -7,7 +7,7 @@ namespace muqsit\vanillagenerator;
 use muqsit\vanillagenerator\generator\nether\NetherGenerator;
 use muqsit\vanillagenerator\generator\overworld\OverworldGenerator;
 use pocketmine\plugin\PluginBase;
-use pocketmine\world\generator\GeneratorManager;
+use pocketmine\level\generator\GeneratorManager;
 
 final class Loader extends PluginBase{
 
