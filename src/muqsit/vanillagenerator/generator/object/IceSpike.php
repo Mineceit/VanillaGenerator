@@ -4,12 +4,20 @@ declare(strict_types=1);
 
 namespace muqsit\vanillagenerator\generator\object;
 
+use pocketmine\block\BlockIds;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
+use pocketmine\level\ChunkManager;
 
-class IceSpike extends TerrainObject{
+/**
+ * Class IceSpike
+ * @package muqsit\vanillagenerator\generator\object
+ * Note: This is the point where I died. I ported VanillaBlocks over (and BlockLegacyIds).
+ */
+
+class IceSpike extends TerrainObject
+{
 
 	private const MATERIALS = [BlockLegacyIds::AIR, BlockLegacyIds::DIRT, BlockLegacyIds::SNOW, BlockLegacyIds::SNOW_BLOCK, BlockLegacyIds::ICE];
 	private const MAX_STEM_RADIUS = 1;
@@ -32,12 +40,12 @@ class IceSpike extends TerrainObject{
 					$stackHeight = $random->nextBoundedInt(5);
 				}
 				for($y = $tipOffset - 1; $y >= -3; --$y){
-					$block = $world->getBlockAt($sourceX + $x, $sourceY + $y, $sourceZ + $z);
+					$block = $world->getBlockIdAt($sourceX + $x, $sourceY + $y, $sourceZ + $z);
 					if(
-						$block->getId() === BlockLegacyIds::PACKED_ICE ||
-						in_array($block->getId(), self::MATERIALS, true)
+						$block === BlockLegacyIds::PACKED_ICE ||
+						in_array($block, self::MATERIALS, true)
 					){
-						$world->setBlockAt($sourceX + $x, $sourceY + $y, $sourceZ + $z, VanillaBlocks::PACKED_ICE());
+						$world->setBlockIdAt($sourceX + $x, $sourceY + $y, $sourceZ + $z, VanillaBlocks::PACKED_ICE()->getId());
 						--$stackHeight;
 						if($stackHeight <= 0){
 							$y -= $random->nextBoundedInt(5);
@@ -63,15 +71,15 @@ class IceSpike extends TerrainObject{
 						continue;
 					}
 					// tip shape in top direction
-					$block = $world->getBlockAt($sourceX + $x, $sourceY + $tipOffset + $y, $sourceZ + $z);
-					if(in_array($block->getId(), self::MATERIALS, true)){
-						$world->setBlockAt($sourceX + $x, $sourceY + $tipOffset + $y, $sourceZ + $z, VanillaBlocks::PACKED_ICE());
+					$block = $world->getBlockIdAt($sourceX + $x, $sourceY + $tipOffset + $y, $sourceZ + $z);
+					if(in_array($block, self::MATERIALS, true)){
+						$world->setBlockIdAt($sourceX + $x, $sourceY + $tipOffset + $y, $sourceZ + $z, VanillaBlocks::PACKED_ICE()->getId());
 						$succeeded = true;
 					}
 					if($radius > 1 && $y !== 0){ // same shape in bottom direction
-						$block = $world->getBlockAt($sourceX + $x, $sourceY + $tipOffset - $y, $sourceZ + $z);
-						if(in_array($block->getId(), self::MATERIALS, true)){
-							$world->setBlockAt($sourceX + $x, $sourceY + $tipOffset - $y, $sourceZ + $z, VanillaBlocks::PACKED_ICE());
+						$block = $world->getBlockIdAt($sourceX + $x, $sourceY + $tipOffset - $y, $sourceZ + $z);
+						if(in_array($block, self::MATERIALS, true)){
+							$world->setBlockIdAt($sourceX + $x, $sourceY + $tipOffset - $y, $sourceZ + $z, VanillaBlocks::PACKED_ICE()->getId());
 							$succeeded = true;
 						}
 					}

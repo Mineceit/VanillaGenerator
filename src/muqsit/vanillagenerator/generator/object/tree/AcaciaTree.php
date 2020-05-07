@@ -10,9 +10,10 @@ use pocketmine\block\utils\TreeType;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\utils\Random;
 use pocketmine\world\BlockTransaction;
-use pocketmine\world\ChunkManager;
+use pocketmine\level\ChunkManager;
 
-class AcaciaTree extends GenericTree{
+class AcaciaTree extends GenericTree
+{
 
 	public function __construct(Random $random, BlockTransaction $transaction){
 		parent::__construct($random, $transaction);
@@ -55,7 +56,7 @@ class AcaciaTree extends GenericTree{
 				--$twistCount;
 			}
 
-			$material = $world->getBlockAt($centerX, $blockY + $y, $centerZ)->getId();
+			$material = $world->getBlockIdAt($centerX, $blockY + $y, $centerZ);
 			if($material === BlockLegacyIds::AIR || $material === BlockLegacyIds::LEAVES){
 				$trunkTopY = $blockY + $y;
 				$this->transaction->addBlockAt($centerX, $blockY + $y, $centerZ, $this->logType);
@@ -102,7 +103,7 @@ class AcaciaTree extends GenericTree{
 				if($twistCount > 0){
 					$centerX += $dxB;
 					$centerZ += $dzB;
-					$material = $world->getBlockAt($centerX, $blockY + $y, $centerZ)->getId();
+					$material = $world->getBlockIdAt($centerX, $blockY + $y, $centerZ);
 					if($material === BlockLegacyIds::AIR || $material === BlockLegacyIds::LEAVES){
 						$trunkTopY = $blockY + $y;
 						$this->transaction->addBlockAt($centerX, $blockY + $y, $centerZ, $this->logType);
@@ -134,7 +135,7 @@ class AcaciaTree extends GenericTree{
 	}
 
 	private function setLeaves(int $x, int $y, int $z, ChunkManager $world) : void{
-		if($world->getBlockAt($x, $y, $z)->getId() === BlockLegacyIds::AIR){
+		if($world->getBlockAt($x, $y, $z) === BlockLegacyIds::AIR){
 			$this->transaction->addBlockAt($x, $y, $z, $this->leavesType);
 		}
 	}

@@ -9,11 +9,11 @@ use pocketmine\block\Block;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\utils\TreeType;
 use pocketmine\block\VanillaBlocks;
-use pocketmine\math\Facing;
+use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
 use pocketmine\world\BlockTransaction;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\World;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\Level;
 
 class MegaJungleTree extends GenericTree{
 
@@ -45,9 +45,9 @@ class MegaJungleTree extends GenericTree{
 			// check for block collision on horizontal slices
 			for($x = $baseX - $radius; $x <= $baseX + $radius; ++$x){
 				for($z = $baseZ - $radius; $z <= $baseZ + $radius; ++$z){
-					if($y >= 0 && $y < World::Y_MAX){
+					if($y >= 0 && $y < Level::Y_MAX){
 						// we can overlap some blocks around
-						if(!isset($this->overridables[$world->getBlockAt($x, $y, $z)->getId()])){
+						if(!isset($this->overridables[$world->getBlockIdAt($x, $y, $z)])){
 							return false;
 						}
 					}else{ // height out of range
@@ -126,19 +126,19 @@ class MegaJungleTree extends GenericTree{
 	protected function generateTrunk(ChunkManager $world, int $blockX, int $blockY, int $blockZ) : void{
 		// SELF, SOUTH, EAST, SOUTH EAST
 		for($y = 0; $y < $this->height + -1; ++$y){
-			$type = $world->getBlockAt($blockX + 0, $blockY + $y, $blockZ + 0)->getId();
+			$type = $world->getBlockIdAt($blockX + 0, $blockY + $y, $blockZ + 0);
 			if($type === BlockLegacyIds::AIR || $type === BlockLegacyIds::LEAVES){
 				$this->transaction->addBlockAt($blockX + 0, $blockY + $y, $blockZ, $this->logType);
 			}
-			$type = $world->getBlockAt($blockX + 0, $blockY + $y, $blockZ + 1)->getId();
+			$type = $world->getBlockIdAt($blockX + 0, $blockY + $y, $blockZ + 1);
 			if($type === BlockLegacyIds::AIR || $type === BlockLegacyIds::LEAVES){
 				$this->transaction->addBlockAt($blockX + 0, $blockY + $y, $blockZ + 1, $this->logType);
 			}
-			$type = $world->getBlockAt($blockX + 1, $blockY + $y, $blockZ + 0)->getId();
+			$type = $world->getBlockIdAt($blockX + 1, $blockY + $y, $blockZ + 0);
 			if($type === BlockLegacyIds::AIR || $type === BlockLegacyIds::LEAVES){
 				$this->transaction->addBlockAt($blockX + 1, $blockY + $y, $blockZ, $this->logType);
 			}
-			$type = $world->getBlockAt($blockX + 1, $blockY + $y, $blockZ + 1)->getId();
+			$type = $world->getBlockIdAt($blockX + 1, $blockY + $y, $blockZ + 1);
 			if($type === BlockLegacyIds::AIR || $type === BlockLegacyIds::LEAVES){
 				$this->transaction->addBlockAt($blockX + 1, $blockY + $y, $blockZ + 1, $this->logType);
 			}
@@ -156,21 +156,21 @@ class MegaJungleTree extends GenericTree{
 
 	private function addVinesOnTrunk(ChunkManager $world, int $blockX, int $blockY, int $blockZ, Random $random) : void{
 		for($y = 1; $y < $this->height; ++$y){
-			$this->maybePlaceVine($world, $blockX + -1, $blockY + $y, $blockZ + 0, Facing::EAST, $random);
-			$this->maybePlaceVine($world, $blockX + 0, $blockY + $y, $blockZ + -1, Facing::SOUTH, $random);
-			$this->maybePlaceVine($world, $blockX + 2, $blockY + $y, $blockZ + 0, Facing::WEST, $random);
-			$this->maybePlaceVine($world, $blockX + 1, $blockY + $y, $blockZ + -1, Facing::SOUTH, $random);
-			$this->maybePlaceVine($world, $blockX + 2, $blockY + $y, $blockZ + 1, Facing::WEST, $random);
-			$this->maybePlaceVine($world, $blockX + 1, $blockY + $y, $blockZ + 2, Facing::NORTH, $random);
-			$this->maybePlaceVine($world, $blockX + -1, $blockY + $y, $blockZ + 1, Facing::EAST, $random);
-			$this->maybePlaceVine($world, $blockX + 0, $blockY + $y, $blockZ + 2, Facing::NORTH, $random);
+			$this->maybePlaceVine($world, $blockX + -1, $blockY + $y, $blockZ + 0, Vector3::SIDE_EAST, $random);
+			$this->maybePlaceVine($world, $blockX + 0, $blockY + $y, $blockZ + -1, Vector3::SIDE_SOUTH, $random);
+			$this->maybePlaceVine($world, $blockX + 2, $blockY + $y, $blockZ + 0, Vector3::SIDE_WEST, $random);
+			$this->maybePlaceVine($world, $blockX + 1, $blockY + $y, $blockZ + -1, Vector3::SIDE_SOUTH, $random);
+			$this->maybePlaceVine($world, $blockX + 2, $blockY + $y, $blockZ + 1, Vector3::SIDE_WEST, $random);
+			$this->maybePlaceVine($world, $blockX + 1, $blockY + $y, $blockZ + 2, Vector3::SIDE_NORTH, $random);
+			$this->maybePlaceVine($world, $blockX + -1, $blockY + $y, $blockZ + 1, Vector3::SIDE_EAST, $random);
+			$this->maybePlaceVine($world, $blockX + 0, $blockY + $y, $blockZ + 2, Vector3::SIDE_NORTH, $random);
 		}
 	}
 
 	private function maybePlaceVine(ChunkManager $world, int $absoluteX, int $absoluteY, int $absoluteZ, int $facingDirection, Random $random) : void{
 		if(
 			$random->nextBoundedInt(3) !== 0 &&
-			$world->getBlockAt($absoluteX, $absoluteY, $absoluteZ)->getId() === BlockLegacyIds::AIR
+			$world->getBlockIdAt($absoluteX, $absoluteY, $absoluteZ) === BlockLegacyIds::AIR
 		){
 			$this->transaction->addBlockAt($absoluteX, $absoluteY, $absoluteZ, BlockUtils::VINE($facingDirection));
 		}

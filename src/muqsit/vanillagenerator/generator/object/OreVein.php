@@ -6,7 +6,7 @@ namespace muqsit\vanillagenerator\generator\object;
 
 use pocketmine\block\Block;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
+use pocketmine\level\ChunkManager;
 
 class OreVein extends TerrainObject{
 
@@ -76,8 +76,8 @@ class OreVein extends TerrainObject{
 					}
 					for($z = (int) ($originZ - $radiusH); $z <= (int) ($originZ + $radiusH); ++$z){
 						$squaredNormalizedZ = self::normalizedSquaredCoordinate($originZ, $radiusH, $z);
-						if($squaredNormalizedX + $squaredNormalizedY + $squaredNormalizedZ < 1 && $world->getBlockAt($x, $y, $z)->getId() === $this->targetType){
-							$world->setBlockAt($x, $y, $z, $this->type);
+						if($squaredNormalizedX + $squaredNormalizedY + $squaredNormalizedZ < 1 && $world->getBlockIdAt($x, $y, $z) === $this->targetType){
+							$world->setBlockIdAt($x, $y, $z, $this->type->getId());
 							$succeeded = true;
 						}
 					}

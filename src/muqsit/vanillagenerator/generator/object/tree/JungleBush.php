@@ -9,7 +9,7 @@ use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\utils\TreeType;
 use pocketmine\utils\Random;
 use pocketmine\world\BlockTransaction;
-use pocketmine\world\ChunkManager;
+use pocketmine\level\ChunkManager;
 
 class JungleBush extends GenericTree{
 
@@ -29,7 +29,7 @@ class JungleBush extends GenericTree{
 	}
 
 	public function generate(ChunkManager $world, Random $random, int $blockX, int $blockY, int $blockZ) : bool{
-		while((($blockId = $world->getBlockAt($blockX, $blockY, $blockZ)->getId()) === BlockLegacyIds::AIR || $blockId === BlockLegacyIds::LEAVES) && $blockY > 0){
+		while((($blockId = $world->getBlockIdAt($blockX, $blockY, $blockZ)) === BlockLegacyIds::AIR || $blockId === BlockLegacyIds::LEAVES) && $blockY > 0){
 			--$blockY;
 		}
 

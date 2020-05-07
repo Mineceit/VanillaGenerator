@@ -12,10 +12,11 @@ use pocketmine\block\utils\TreeType;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\utils\Random;
 use pocketmine\world\BlockTransaction;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\World;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\Level;
 
-class GenericTree extends TerrainObject{
+class GenericTree extends TerrainObject
+{
 
 	/** @var BlockTransaction */
 	protected $transaction;
@@ -69,7 +70,7 @@ class GenericTree extends TerrainObject{
 	 */
 	final protected function setType(TreeType $type) : void{
 		$magicNumber = $type->getMagicNumber();
-		$block_factory = BlockFactory::getInstance();
+		$block_factory = new BlockFactory();
 		$this->logType = $block_factory->get($magicNumber >= 4 ? BlockLegacyIds::LOG2 : BlockLegacyIds::LOG, $magicNumber & 0x3);
 		$this->leavesType = $block_factory->get($magicNumber >= 4 ? BlockLegacyIds::LEAVES2 : BlockLegacyIds::LEAVES, $magicNumber & 0x3);
 	}
@@ -81,7 +82,7 @@ class GenericTree extends TerrainObject{
 	 * @return bool whether this tree can grow without exceeding block height 255; false otherwise.
 	 */
 	public function canHeightFit(int $baseHeight) : bool{
-		return $baseHeight >= 1 && $baseHeight + $this->height + 1 <= World::Y_MAX;
+		return $baseHeight >= 1 && $baseHeight + $this->height + 1 <= Level::Y_MAX;
 	}
 
 	/**
@@ -118,7 +119,7 @@ class GenericTree extends TerrainObject{
 				for($z = $baseZ - $radius; $z <= $baseZ + $radius; ++$z){
 					if($y >= 0 && $y < $height){
 						// we can overlap some blocks around
-						if(!isset($this->overridables[$world->getBlockAt($x, $y, $z)->getId()])){
+						if(!isset($this->overridables[$world->getBlockIdAt($x, $y, $z)])){
 							return false;
 						}
 					}else{ // height out of range
@@ -199,7 +200,7 @@ class GenericTree extends TerrainObject{
 	 * @param ChunkManager $world the world we are generating in
 	 */
 	protected function replaceIfAirOrLeaves(int $x, int $y, int $z, Block $newMaterial, ChunkManager $world) : void{
-		$oldMaterial = $world->getBlockAt($x, $y, $z)->getId();
+		$oldMaterial = $world->getBlockAt($x, $y, $z);
 		if($oldMaterial === BlockLegacyIds::AIR || $oldMaterial === BlockLegacyIds::LEAVES){
 			$this->transaction->addBlockAt($x, $y, $z, $newMaterial);
 		}

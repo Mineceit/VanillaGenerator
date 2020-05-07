@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace muqsit\vanillagenerator\generator\object;
 
 use pocketmine\block\BlockLegacyIds;
-use pocketmine\block\BlockLegacyMetadata;
 use pocketmine\block\DoublePlant;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
+use pocketmine\level\ChunkManager;
 
 abstract class TerrainObject{
 
@@ -35,17 +34,18 @@ abstract class TerrainObject{
 	 * @param int $z
 	 * @return bool whether a plant was removed; false if none was present
 	 */
-	public static function killPlantAbove(ChunkManager $world, int $x, int $y, int $z) : bool{
-		$blockAbove = $world->getBlockAt($x, $y + 1, $z);
-		$mat = $blockAbove->getId();
+	public static function killPlantAbove(ChunkManager $world, int $x, int $y, int $z) : bool
+	{
+		$blockAbove = $world->getBlockIdAt($x, $y + 1, $z);
+		$mat = $blockAbove;
 		if(in_array($mat, static::PLANT_TYPES, true)){
-			if(($mat === BlockLegacyIds::DOUBLE_PLANT) && $blockAbove instanceof DoublePlant){
-				$dataAbove = $blockAbove->getMeta();
-				if(($dataAbove & BlockLegacyMetadata::DOUBLE_PLANT_FLAG_TOP) !== 0){
-					$world->setBlockAt($x, $y + 1, $z, VanillaBlocks::AIR());
-				}
-			}
-			$world->setBlockAt($x, $y + 1, $z, VanillaBlocks::AIR());
+//			if(($mat === BlockLegacyIds::DOUBLE_PLANT) && $blockAbove instanceof DoublePlant){
+//				$dataAbove = $blockAbove->getMeta();
+//				if(($dataAbove & BlockLegacyMetadata::DOUBLE_PLANT_FLAG_TOP) !== 0){
+//					$world->setBlockIdAt($x, $y + 1, $z, VanillaBlocks::AIR()->getId());
+//				}
+//			}
+			$world->setBlockIdAt($x, $y + 1, $z, VanillaBlocks::AIR()->getId());
 			return true;
 		}
 

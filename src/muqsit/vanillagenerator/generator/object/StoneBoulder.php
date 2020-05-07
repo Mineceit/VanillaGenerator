@@ -7,7 +7,7 @@ namespace muqsit\vanillagenerator\generator\object;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
+use pocketmine\level\ChunkManager;
 
 class StoneBoulder extends TerrainObject{
 
@@ -17,18 +17,18 @@ class StoneBoulder extends TerrainObject{
 		$groundReached = false;
 		while($sourceY > 3){
 			--$sourceY;
-			$block = $world->getBlockAt($sourceX, $sourceY, $sourceZ);
-			if($block->getId() === BlockLegacyIds::AIR){
+			$block = $world->getBlockIdAt($sourceX, $sourceY, $sourceZ);
+			if($block === BlockLegacyIds::AIR){
 				continue;
 			}
 
-			if(in_array($block->getId(), self::GROUND_TYPES, true)){
+			if(in_array($block, self::GROUND_TYPES, true)){
 				$groundReached = true;
 				++$sourceY;
 				break;
 			}
 		}
-		if(!$groundReached || $world->getBlockAt($sourceX, $sourceY, $sourceZ)->getId() !== BlockLegacyIds::AIR){
+		if(!$groundReached || $world->getBlockIdAt($sourceX, $sourceY, $sourceZ) !== BlockLegacyIds::AIR){
 			return false;
 		}
 		for($i = 0; $i < 3; ++$i){
@@ -46,7 +46,7 @@ class StoneBoulder extends TerrainObject{
 							continue;
 						}
 						if(!TerrainObject::killPlantAbove($world, $sourceX + $x, $sourceY + $y, $sourceZ + $z)){
-							$world->setBlockAt($sourceX + $x, $sourceY + $y, $sourceZ + $z, VanillaBlocks::MOSSY_COBBLESTONE());
+							$world->setBlockIdAt($sourceX + $x, $sourceY + $y, $sourceZ + $z, BlockLegacyIds::MOSSY_COBBLESTONE);
 						}
 					}
 				}

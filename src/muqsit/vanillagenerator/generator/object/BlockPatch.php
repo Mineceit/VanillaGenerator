@@ -6,7 +6,7 @@ namespace muqsit\vanillagenerator\generator\object;
 
 use pocketmine\block\Block;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
+use pocketmine\level\ChunkManager;
 
 class BlockPatch extends TerrainObject{
 

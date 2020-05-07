@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace muqsit\vanillagenerator\generator\object\tree;
 
+use pocketmine\block\Block;
 use pocketmine\block\BlockFactory;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
 use pocketmine\world\BlockTransaction;
-use pocketmine\world\ChunkManager;
+use pocketmine\level\ChunkManager;
 
-class BigOakTree extends GenericTree{
+class BigOakTree extends GenericTree
+{
 
 	private const LEAF_DENSITY = 1.0;
 
@@ -64,7 +66,7 @@ class BigOakTree extends GenericTree{
 					for($z = -$nodeDistance; $z <= $nodeDistance; ++$z){
 						$sizeX = abs($x) + 0.5;
 						$sizeZ = abs($z) + 0.5;
-						if($sizeX * $sizeX + $sizeZ * $sizeZ <= $size * $size && isset($this->overridables[$world->getBlockAt($node->x + $x, $node->y + $y, $node->z + $z)->getId()])){
+						if($sizeX * $sizeX + $sizeZ * $sizeZ <= $size * $size && isset($this->overridables[$world->getBlockIdAt($node->x + $x, $node->y + $y, $node->z + $z)])){
 							$this->transaction->addBlockAt($node->x + $x, $node->y + $y, $node->z + $z, $this->leavesType);
 						}
 					}
@@ -77,7 +79,7 @@ class BigOakTree extends GenericTree{
 			$this->transaction->addBlockAt($blockX, $blockY + $y, $blockZ, $this->logType);
 		}
 
-		$block_factory = BlockFactory::getInstance();
+		$block_factory = new BlockFactory();
 
 		// generate the branches
 		foreach($leafNodes as $node){
@@ -117,7 +119,7 @@ class BigOakTree extends GenericTree{
 			for($i = 0; $i <= $maxDistance; ++$i, ++$n){
 				$target = $from->add(0.5 + $i * $dx, 0.5 + $i * $dy, 0.5 + $i * $dz);
 				$target_floorY = $target->getFloorY();
-				if($target_floorY < 0 || $target_floorY > $height || !isset($this->overridables[$world->getBlockAt($target->getFloorX(), $target->getFloorY(), $target->getFloorZ())->getId()])){
+				if($target_floorY < 0 || $target_floorY > $height || !isset($this->overridables[$world->getBlockIdAt($target->getFloorX(), $target->getFloorY(), $target->getFloorZ())])){
 					return $n;
 				}
 			}

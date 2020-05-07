@@ -8,7 +8,7 @@ use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\utils\Random;
 use pocketmine\world\BlockTransaction;
-use pocketmine\world\ChunkManager;
+use pocketmine\level\ChunkManager;
 
 class TallRedwoodTree extends RedwoodTree{
 
@@ -46,7 +46,7 @@ class TallRedwoodTree extends RedwoodTree{
 							abs($z - $blockZ) !== $radius ||
 							$radius <= 0
 						) &&
-						$world->getBlockAt($x, $y, $z)->getId() === BlockLegacyIds::AIR
+						$world->getBlockIdAt($x, $y, $z) === BlockLegacyIds::AIR
 					){
 						$this->transaction->addBlockAt($x, $y, $z, $this->leavesType);
 					}

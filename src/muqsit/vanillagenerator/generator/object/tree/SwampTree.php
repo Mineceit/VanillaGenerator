@@ -10,8 +10,8 @@ use pocketmine\block\utils\TreeType;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\utils\Random;
 use pocketmine\world\BlockTransaction;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\World;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\Level;
 
 class SwampTree extends CocoaTree{
 
@@ -31,7 +31,7 @@ class SwampTree extends CocoaTree{
 
 	public function canPlace(int $baseX, int $baseY, int $baseZ, ChunkManager $world) : bool{
 		for($y = $baseY; $y <= $baseY + 1 + $this->height; ++$y){
-			if($y < 0 || $y >= World::Y_MAX){ // height out of range
+			if($y < 0 || $y >= Level::Y_MAX){ // height out of range
 				return false;
 			}
 
@@ -46,7 +46,7 @@ class SwampTree extends CocoaTree{
 			for($x = $baseX - $radius; $x <= $baseX + $radius; ++$x){
 				for($z = $baseZ - $radius; $z <= $baseZ + $radius; ++$z){
 					// we can overlap some blocks around
-					$type = $world->getBlockAt($x, $y, $z)->getId();
+					$type = $world->getBlockIdAt($x, $y, $z);
 					if(isset($this->overridables[$type])){
 						continue;
 					}
@@ -65,7 +65,7 @@ class SwampTree extends CocoaTree{
 	}
 
 	public function generate(ChunkManager $world, Random $random, int $blockX, int $blockY, int $blockZ) : bool{
-		while(in_array($world->getBlockAt($blockX, $blockY, $blockZ)->getId(), self::WATER_BLOCK_TYPES, true)){
+		while(in_array($world->getBlockIdAt($blockX, $blockY, $blockZ), self::WATER_BLOCK_TYPES, true)){
 			--$blockY;
 		}
 
@@ -92,7 +92,7 @@ class SwampTree extends CocoaTree{
 
 		// generate the trunk
 		for($y = 0; $y < $this->height; ++$y){
-			$material = $world->getBlockAt($blockX, $blockY + $y, $blockZ)->getId();
+			$material = $world->getBlockIdAt($blockX, $blockY + $y, $blockZ);
 			if(
 				$material === BlockLegacyIds::AIR ||
 				$material === BlockLegacyIds::LEAVES ||

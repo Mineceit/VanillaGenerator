@@ -9,8 +9,8 @@ use pocketmine\block\utils\TreeType;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\utils\Random;
 use pocketmine\world\BlockTransaction;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\World;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\Level;
 
 class RedwoodTree extends GenericTree{
 
@@ -50,9 +50,9 @@ class RedwoodTree extends GenericTree{
 			// check for block collision on horizontal slices
 			for($x = $baseX - $radius; $x <= $baseX + $radius; ++$x){
 				for($z = $baseZ - $radius; $z <= $baseZ + $radius; ++$z){
-					if($y >= 0 && $y < World::Y_MAX){
+					if($y >= 0 && $y < Level::Y_MAX){
 						// we can overlap some blocks around
-						$type = $world->getBlockAt($x, $y, $z)->getId();
+						$type = $world->getBlockIdAt($x, $y, $z);
 						if(!isset($this->overridables[$type])){
 							return false;
 						}
@@ -84,7 +84,7 @@ class RedwoodTree extends GenericTree{
 							abs($z - $blockZ) !== $radius ||
 							$radius <= 0
 						) &&
-						$world->getBlockAt($x, $y, $z)->getId() === BlockLegacyIds::AIR
+						$world->getBlockIdAt($x, $y, $z) === BlockLegacyIds::AIR
 					){
 						$this->transaction->addBlockAt($x, $y, $z, $this->leavesType);
 					}
@@ -104,7 +104,7 @@ class RedwoodTree extends GenericTree{
 
 		// generate the trunk
 		for($y = 0; $y < $this->height - $random->nextBoundedInt(3); $y++){
-			$type = $world->getBlockAt($blockX, $blockY + $y, $blockZ)->getId();
+			$type = $world->getBlockIdAt($blockX, $blockY + $y, $blockZ);
 			if(isset($this->overridables[$type])){
 				$this->transaction->addBlockAt($blockX, $blockY + $y, $blockZ, $this->logType);
 			}

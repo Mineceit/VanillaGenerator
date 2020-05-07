@@ -9,7 +9,7 @@ use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\utils\Random;
 use pocketmine\world\BlockTransaction;
-use pocketmine\world\ChunkManager;
+use pocketmine\level\ChunkManager;
 
 class BrownMushroomTree extends GenericTree{
 
@@ -58,7 +58,7 @@ class BrownMushroomTree extends GenericTree{
 					// skip source block check
 					if($y !== $baseY || $x !== $baseX || $z !== $baseZ){
 						// we can overlap leaves around
-						if(!isset($this->overridables[$world->getBlockAt($x, $y, $z)->getId()])){
+						if(!isset($this->overridables[$world->getBlockIdAt($x, $y, $z)])){
 							return false;
 						}
 					}
@@ -73,7 +73,7 @@ class BrownMushroomTree extends GenericTree{
 			return false;
 		}
 
-		$block_factory = BlockFactory::getInstance();
+		$block_factory = new BlockFactory();
 
 		// generate the stem
 		$stem = $block_factory->get($this->type, 10);

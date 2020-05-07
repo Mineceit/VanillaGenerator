@@ -11,11 +11,13 @@ use muqsit\vanillagenerator\generator\VanillaGenerator;
 use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\VanillaBlocks;
+use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
-class NetherGenerator extends VanillaGenerator{
+class NetherGenerator extends VanillaGenerator
+{
 
 	protected const COORDINATE_SCALE = 684.412;
 	protected const HEIGHT_SCALE = 2053.236;
@@ -29,9 +31,9 @@ class NetherGenerator extends VanillaGenerator{
 	/** @var float[][][] */
 	private $density = [];
 
-	public function __construct(ChunkManager $world, int $seed, array $options = []){
-		parent::__construct($world, $seed, $options);
-		$this->addPopulators(new NetherPopulator($world->getWorldHeight()));
+	public function __construct(array $options = []){
+		parent::__construct($options);
+		$this->addPopulators(new NetherPopulator($this->level->getWorldHeight()));
 	}
 
 	public function getWorldHeight() : int{
@@ -51,7 +53,7 @@ class NetherGenerator extends VanillaGenerator{
 		$gravelNoise = $octaves["gravel"]->getFractalBrownianMotion($cx, 0, $cz, 0.5, 2.0);
 
 		/** @var Chunk $chunk */
-		$chunk = $this->world->getChunk($chunkX, $chunkZ);
+		$chunk = $this->level->getChunk($chunkX, $chunkZ);
 
 		for($x = 0; $x < 16; ++$x){
 			for($z = 0; $z < 16; ++$z){
@@ -131,9 +133,9 @@ class NetherGenerator extends VanillaGenerator{
 								// any density higher than 0 is ground, any density lower or equal
 								// to 0 is air (or lava if under the lava level).
 								if ($dens > 0) {
-									$this->world->setBlockAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), VanillaBlocks::NETHERRACK());
+									$this->level->setBlockAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), VanillaBlocks::NETHERRACK());
 								} else if ($l + ($k << 3) < 32) {
-									$this->world->setBlockAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), $block_factory->get(BlockLegacyIds::STILL_LAVA));
+									$this->level->setBlockAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), $block_factory->get(BlockLegacyIds::STILL_LAVA));
 								}
 								// interpolation along z
 								$dens += ($d10 - $d9) / 4;
@@ -225,10 +227,10 @@ class NetherGenerator extends VanillaGenerator{
 		$worldHeightM1 = $worldHeight - 1;
 		for($y = $worldHeightM1; $y >= 0; --$y){
 			if($y <= $this->random->nextBoundedInt(5) || $y >= $worldHeightM1 - $this->random->nextBoundedInt(5)){
-				$this->world->setBlockAt($x, $y, $z, VanillaBlocks::BEDROCK());
+				$this->level->setBlockAt($x, $y, $z, VanillaBlocks::BEDROCK());
 				continue;
 			}
-			$mat = $this->world->getBlockAt($x, $y, $z)->getId();
+			$mat = $this->level->getBlockAt($x, $y, $z)->getId();
 			if($mat === BlockLegacyIds::AIR){
 				$deep = -1;
 			}elseif($mat === BlockLegacyIds::NETHERRACK){
@@ -251,15 +253,30 @@ class NetherGenerator extends VanillaGenerator{
 
 					$deep = $surfaceHeight;
 					if($y >= 63){
-						$this->world->setBlockAt($x, $y, $z, $topMat);
+						$this->level->setBlockAt($x, $y, $z, $topMat);
 					}else{
-						$this->world->setBlockAt($x, $y, $z, $groundMat);
+						$this->level->setBlockAt($x, $y, $z, $groundMat);
 					}
 				}elseif($deep > 0){
 					--$deep;
-					$this->world->setBlockAt($x, $y, $z, $groundMat);
+					$this->level->setBlockAt($x, $y, $z, $groundMat);
 				}
 			}
 		}
+	}
+
+	public function getSettings(): array
+	{
+		return $this->settings;
+	}
+
+	public function getName(): string
+	{
+		return $this->name;
+	}
+
+	public function getSpawn(): Vector3
+	{
+		return $this->spawn;
 	}
 }

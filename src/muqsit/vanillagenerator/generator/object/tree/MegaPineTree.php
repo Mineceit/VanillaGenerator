@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace muqsit\vanillagenerator\generator\object\tree;
 
+use muqsit\vanillagenerator\Loader;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\utils\Random;
 use pocketmine\world\BlockTransaction;
-use pocketmine\world\ChunkManager;
+use pocketmine\level\ChunkManager;
 
 class MegaPineTree extends MegaRedwoodTree{
 
@@ -53,14 +54,14 @@ class MegaPineTree extends MegaRedwoodTree{
 					continue;
 				}
 				for($y = 2; $y >= -3; --$y){
-					$blockId = $world->getBlockAt($sourceX + $x, $sourceY + $y, $sourceZ + $z)->getId();
+					$blockId = $world->getBlockIdAt($sourceX + $x, $sourceY + $y, $sourceZ + $z);
 					if($blockId === BlockLegacyIds::GRASS || $blockId === BlockLegacyIds::DIRT){
-						if($world->getBlockAt($sourceX + $x, $sourceY + $y + 1, $sourceZ + $z)->isSolid()){
+						if(Loader::isSolid($world->getBlockIdAt($sourceX + $x, $sourceY + $y + 1, $sourceZ + $z))){
 							$dirt = VanillaBlocks::DIRT();
 						}else{
 							$dirt = VanillaBlocks::PODZOL();
 						}
-						$world->setBlockAt($sourceX + $x, $sourceY + $y, $sourceZ + $z, $dirt);
+						$world->setBlockIdAt($sourceX + $x, $sourceY + $y, $sourceZ + $z, $dirt->getId());
 					}elseif($blockId !== BlockLegacyIds::AIR && $sourceY + $y < $sourceY){
 						break;
 					}

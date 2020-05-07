@@ -7,7 +7,7 @@ namespace muqsit\vanillagenerator\generator\object\tree;
 use pocketmine\block\utils\TreeType;
 use pocketmine\utils\Random;
 use pocketmine\world\BlockTransaction;
-use pocketmine\world\ChunkManager;
+use pocketmine\level\ChunkManager;
 
 class MegaRedwoodTree extends MegaJungleTree{
 
