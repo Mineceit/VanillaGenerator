@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace muqsit\vanillagenerator\generator\biomegrid;
 
 use muqsit\vanillagenerator\generator\overworld\biome\BiomeIds;
-use pocketmine\world\biome\Biome;
+use pocketmine\level\biome\Biome;
 
 class RiverMapLayer extends MapLayer{
 

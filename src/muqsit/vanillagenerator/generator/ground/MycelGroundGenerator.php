@@ -6,10 +6,11 @@ namespace muqsit\vanillagenerator\generator\ground;
 
 use pocketmine\block\VanillaBlocks;
 
-class MycelGroundGenerator extends GroundGenerator{
+class MycelGroundGenerator extends GroundGenerator {
 
 	/** @noinspection MagicMethodsValidityInspection */
+	/** @noinspection PhpMissingParentConstructorInspection */
 	public function __construct(){
-		$this->setTopMaterial(VanillaBlocks::MYCELIUM());
+		$this->setTopMaterial(VanillaBlocks::MYCELIUM()->getId());
 	}
 }

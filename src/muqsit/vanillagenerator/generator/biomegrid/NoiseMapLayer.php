@@ -22,7 +22,6 @@ class NoiseMapLayer extends MapLayer{
 		for($i = 0; $i < $sizeZ; ++$i){
 			for($j = 0; $j < $sizeX; ++$j){
 				$noise = $this->noiseGen->octaveNoise($x + $j, $z + $i, 0, 0.175, 0.8, true) * 4.0;
-				$val = 0;
 				if($noise >= 0.05){
 					$val = $noise <= 0.2 ? 3 : 2;
 				}else{

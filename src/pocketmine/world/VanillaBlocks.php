@@ -401,6 +401,9 @@ namespace pocketmine\block;
  * @method static Glass YELLOW_STAINED_GLASS()
  * @method static GlassPane YELLOW_STAINED_GLASS_PANE()
  * @method static Wool YELLOW_WOOL()
+ *
+ * Extra
+ * @method static Stone STONE()
  */
 final class VanillaBlocks{
 //	use RegistryTrait;

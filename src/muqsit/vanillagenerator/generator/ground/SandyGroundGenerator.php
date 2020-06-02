@@ -10,7 +10,7 @@ class SandyGroundGenerator extends GroundGenerator{
 
 	/** @noinspection PhpMissingParentConstructorInspection */
 	public function __construct(){
-		$this->setTopMaterial(VanillaBlocks::SAND());
-		$this->setGroundMaterial(VanillaBlocks::SAND());
+		$this->setTopMaterial(VanillaBlocks::SAND()->getId());
+		$this->setGroundMaterial(VanillaBlocks::SAND()->getId());
 	}
 }

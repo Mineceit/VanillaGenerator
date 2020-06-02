@@ -10,7 +10,7 @@ use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
+use pocketmine\level\ChunkManager;
 
 class MesaGroundGenerator extends GroundGenerator{
 
@@ -98,16 +98,16 @@ class MesaGroundGenerator extends GroundGenerator{
 		$groundSet = false;
 
 		$grass = VanillaBlocks::GRASS();
-		$coarse_dirt = VanillaBlocks::COARSE_DIRT();
+		$coarse_dirt = VanillaBlocks::DIRT();
 
 		for($y = 255; $y >= 0; --$y){
-			if($y < (int) $bryceCanyonHeight && $world->getBlockAt($x, $y, $z)->getId() === BlockLegacyIds::AIR){
-				$world->setBlockAt($x, $y, $z, VanillaBlocks::STONE());
+			if($y < (int) $bryceCanyonHeight && $world->getBlockIdAt($x, $y, $z) === BlockLegacyIds::AIR){
+				$world->setBlockIdAt($x, $y, $z, BlockFactory::get(Block::STONE)->getId());
 			}
 			if($y <= $random->nextBoundedInt(5)){
-				$world->setBlockAt($x, $y, $z, VanillaBlocks::BEDROCK());
+				$world->setBlockIdAt($x, $y, $z, VanillaBlocks::BEDROCK()->getId());
 			}else{
-				$matId = $world->getBlockAt($x, $y, $z)->getId();
+				$matId = $world->getBlockIdAt($x, $y, $z);
 				if($matId === BlockLegacyIds::AIR){
 					$deep = -1;
 				}elseif($matId === BlockLegacyIds::STONE){
@@ -121,23 +121,23 @@ class MesaGroundGenerator extends GroundGenerator{
 						if($y >= $seaLevel - 2){
 							if($this->type === self::FOREST && $y > $seaLevel + 22 + ($surfaceHeight << 1)){
 								$topMat = $colored ? $grass : $coarse_dirt;
-								$world->setBlockAt($x, $y, $z, $topMat);
+								$world->setBlockIdAt($x, $y, $z, $topMat->getId());
 							}elseif($y > $seaLevel + 2 + $surfaceHeight){
 								$color = $this->colorLayer[($y + (int) round(
 										$this->colorNoise->noise($chunkX, $chunkZ, 0, 0.5, 2.0, false) * 2.0))
 								% count($this->colorLayer)];
 								$this->setColoredGroundLayer($world, $x, $y, $z, $y < $seaLevel || $y > 128 ? 1 : ($colored ? $color : -1));
 							}else{
-								$world->setBlockAt($x, $y, $z, $this->topMaterial);
+								$world->setBlockIdAt($x, $y, $z, $this->topMaterial->getId());
 								$groundSet = true;
 							}
 						}else{
-							$world->setBlockAt($x, $y, $z, $groundMat);
+							$world->setBlockIdAt($x, $y, $z, $groundMat->getId());
 						}
 					}elseif($deep > 0){
 						--$deep;
 						if($groundSet){
-							$world->setBlockAt($x, $y, $z, $this->groundMaterial);
+							$world->setBlockIdAt($x, $y, $z, $this->groundMaterial->getId());
 						}else{
 							$color = $this->colorLayer[($y + (int) round(
 									$this->colorNoise->noise($chunkX, $chunkZ, 0, 0.5, 2.0, false) * 2.0))
@@ -151,7 +151,7 @@ class MesaGroundGenerator extends GroundGenerator{
 	}
 
 	private function setColoredGroundLayer(ChunkManager $world, int $x, int $y, int $z, int $color) : void{
-		$world->setBlockAt($x, $y, $z, $color >= 0 ? BlockFactory::getInstance()->get(BlockLegacyIds::STAINED_CLAY, $color) : VanillaBlocks::HARDENED_CLAY());
+		$world->setBlockIdAt($x, $y, $z, VanillaBlocks::HARDENED_CLAY()->getId());
 	}
 
 	private function setRandomLayerColor(Random $random, int $minLayerCount, int $minLayerHeight, int $color) : void{

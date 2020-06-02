@@ -11,7 +11,7 @@ class RockyGroundGenerator extends GroundGenerator{
 	/** @noinspection MagicMethodsValidityInspection */
 	/** @noinspection PhpMissingParentConstructorInspection */
 	public function __construct(){
-		$this->setTopMaterial(VanillaBlocks::STONE());
-		$this->setGroundMaterial(VanillaBlocks::STONE());
+		$this->setTopMaterial(VanillaBlocks::STONE()->getId());
+		$this->setGroundMaterial(VanillaBlocks::STONE()->getId());
 	}
 }

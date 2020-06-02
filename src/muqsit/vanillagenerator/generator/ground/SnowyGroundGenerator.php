@@ -11,6 +11,6 @@ class SnowyGroundGenerator extends GroundGenerator{
 	/** @noinspection MagicMethodsValidityInspection */
 	/** @noinspection PhpMissingParentConstructorInspection */
 	public function __construct(){
-		$this->setTopMaterial(VanillaBlocks::SNOW());
+		$this->setTopMaterial(VanillaBlocks::SNOW()->getId());
 	}
 }
