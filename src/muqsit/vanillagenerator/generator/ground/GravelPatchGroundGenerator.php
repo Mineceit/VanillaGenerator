@@ -12,11 +12,11 @@ class GravelPatchGroundGenerator extends GroundGenerator{
 
 	public function generateTerrainColumn(ChunkManager $world, Random $random, int $x, int $z, int $biome, float $surfaceNoise) : void{
 		if($surfaceNoise < -1.0 || $surfaceNoise > 2.0){
-			$this->setTopMaterial(VanillaBlocks::GRAVEL());
-			$this->setGroundMaterial(VanillaBlocks::GRAVEL());
+			$this->setTopMaterial(VanillaBlocks::GRAVEL()->getId());
+			$this->setGroundMaterial(VanillaBlocks::GRAVEL()->getId());
 		}else{
-			$this->setTopMaterial(VanillaBlocks::GRASS());
-			$this->setGroundMaterial(VanillaBlocks::DIRT());
+			$this->setTopMaterial(VanillaBlocks::GRASS()->getId());
+			$this->setGroundMaterial(VanillaBlocks::DIRT()->getId());
 		}
 
 		parent::generateTerrainColumn($world, $random, $x, $z, $biome, $surfaceNoise);

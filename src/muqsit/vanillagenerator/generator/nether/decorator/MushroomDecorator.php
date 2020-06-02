@@ -8,8 +8,8 @@ use muqsit\vanillagenerator\generator\Decorator;
 use pocketmine\block\Block;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
 class MushroomDecorator extends Decorator{
 
@@ -34,14 +34,14 @@ class MushroomDecorator extends Decorator{
 			$z = $sourceZ + $random->nextBoundedInt(8) - $random->nextBoundedInt(8);
 			$y = $sourceY + $random->nextBoundedInt(4) - $random->nextBoundedInt(4);
 
-			$block = $world->getBlockAt($x, $y, $z);
-			$blockBelow = $world->getBlockAt($x, $y - 1, $z);
+			$block = $world->getBlockIdAt($x, $y, $z);
+			$blockBelow = $world->getBlockIdAt($x, $y - 1, $z);
 			if(
 				$y < $height &&
-				$block->getId() === BlockLegacyIds::AIR &&
-				in_array($blockBelow->getId(), self::MATERIALS, true)
+				$block === BlockLegacyIds::AIR &&
+				in_array($blockBelow, self::MATERIALS, true)
 			){
-				$world->setBlockAt($x, $y, $z, $this->type);
+				$world->setBlockIdAt($x, $y, $z, $this->type->getId());
 			}
 		}
 	}

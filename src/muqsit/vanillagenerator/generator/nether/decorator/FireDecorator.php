@@ -8,8 +8,8 @@ use muqsit\vanillagenerator\generator\Decorator;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
 class FireDecorator extends Decorator{
 
@@ -29,14 +29,14 @@ class FireDecorator extends Decorator{
 				$z = $sourceZ + $random->nextBoundedInt(8) - $random->nextBoundedInt(8);
 				$y = $sourceY + $random->nextBoundedInt(4) - $random->nextBoundedInt(4);
 
-				$block = $world->getBlockAt($x, $y, $z);
-				$blockBelow = $world->getBlockAt($x, $y - 1, $z);
+				$block = $world->getBlockIdAt($x, $y, $z);
+				$blockBelow = $world->getBlockIdAt($x, $y - 1, $z);
 				if(
 					$y < $height &&
-					$block->getId() === BlockLegacyIds::AIR &&
-					$blockBelow->getId() === BlockLegacyIds::NETHERRACK
+					$block === BlockLegacyIds::AIR &&
+					$blockBelow === BlockLegacyIds::NETHERRACK
 				){
-					$world->setBlockAt($x, $y, $z, VanillaBlocks::FIRE());
+					$world->setBlockIdAt($x, $y, $z, VanillaBlocks::FIRE()->getId());
 				}
 			}
 		}

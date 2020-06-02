@@ -7,15 +7,14 @@ namespace muqsit\vanillagenerator\generator\nether\decorator;
 use muqsit\vanillagenerator\generator\Decorator;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\block\VanillaBlocks;
-use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
 
 class GlowstoneDecorator extends Decorator{
 
-	private const SIDES = [Facing::EAST, Facing::WEST, Facing::DOWN, Facing::UP, Facing::SOUTH, Facing::NORTH];
+	private const SIDES = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_DOWN, Vector3::SIDE_UP, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH];
 
 	/** @var bool */
 	private $variableAmount;
@@ -35,22 +34,22 @@ class GlowstoneDecorator extends Decorator{
 			$sourceZ = ($chunk->getZ() << 4) + $random->nextBoundedInt(16);
 			$sourceY = 4 + $random->nextBoundedInt($height - $sourceYMargin);
 
-			$block = $world->getBlockAt($sourceX, $sourceY, $sourceZ);
+			$block = $world->getBlockIdAt($sourceX, $sourceY, $sourceZ);
 			if(
-				$block->getId() !== BlockLegacyIds::AIR ||
-				$world->getBlockAt($sourceX, $sourceY + 1, $sourceZ)->getId() !== BlockLegacyIds::NETHERRACK
+				$block !== BlockLegacyIds::AIR ||
+				$world->getBlockIdAt($sourceX, $sourceY + 1, $sourceZ) !== BlockLegacyIds::NETHERRACK
 			){
 				continue;
 			}
 
-			$world->setBlockAt($sourceX, $sourceY, $sourceZ, VanillaBlocks::GLOWSTONE());
+			$world->setBlockIdAt($sourceX, $sourceY, $sourceZ, VanillaBlocks::GLOWSTONE()->getId());
 
 			for($j = 0; $j < 1500; ++$j){
 				$x = $sourceX + $random->nextBoundedInt(8) - $random->nextBoundedInt(8);
 				$z = $sourceZ + $random->nextBoundedInt(8) - $random->nextBoundedInt(8);
 				$y = $sourceY - $random->nextBoundedInt(12);
-				$block = $world->getBlockAt($x, $y, $z);
-				if($block->getId() !== BlockLegacyIds::AIR){
+				$block = $world->getBlockIdAt($x, $y, $z);
+				if($block !== BlockLegacyIds::AIR){
 					continue;
 				}
 
@@ -58,13 +57,13 @@ class GlowstoneDecorator extends Decorator{
 				$vector = new Vector3($x, $y, $z);
 				foreach(self::SIDES as $face){
 					$pos = $vector->getSide($face);
-					if($world->getBlockAt($pos->x, $pos->y, $pos->z)->getId() === BlockLegacyIds::GLOWSTONE){
+					if($world->getBlockIdAt($pos->x, $pos->y, $pos->z) === BlockLegacyIds::GLOWSTONE){
 						++$glowstoneBlockCount;
 					}
 				}
 
 				if($glowstoneBlockCount === 1){
-					$world->setBlockAt($x, $y, $z, VanillaBlocks::GLOWSTONE());
+					$world->setBlockIdAt($x, $y, $z, VanillaBlocks::GLOWSTONE()->getId());
 				}
 			}
 		}

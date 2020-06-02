@@ -110,8 +110,6 @@ class NetherGenerator extends VanillaGenerator
 		$x = $chunkX << 4;
 		$z = $chunkZ << 4;
 
-		$block_factory = BlockFactory::getInstance();
-
 		for ($i = 0; $i < 5 - 1; ++$i) {
 			for ($j = 0; $j < 5 - 1; ++$j) {
 				for ($k = 0; $k < 17 - 1; ++$k) {
@@ -133,9 +131,9 @@ class NetherGenerator extends VanillaGenerator
 								// any density higher than 0 is ground, any density lower or equal
 								// to 0 is air (or lava if under the lava level).
 								if ($dens > 0) {
-									$this->level->setBlockAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), VanillaBlocks::NETHERRACK());
+									$this->level->setBlockIdAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), VanillaBlocks::NETHERRACK()->getId());
 								} else if ($l + ($k << 3) < 32) {
-									$this->level->setBlockAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), $block_factory->get(BlockLegacyIds::STILL_LAVA));
+									$this->level->setBlockIdAt($x + $m + ($i << 2), $l + ($k << 3), $z + $n + ($j << 2), BlockLegacyIds::STILL_LAVA);
 								}
 								// interpolation along z
 								$dens += ($d10 - $d9) / 4;
@@ -227,10 +225,10 @@ class NetherGenerator extends VanillaGenerator
 		$worldHeightM1 = $worldHeight - 1;
 		for($y = $worldHeightM1; $y >= 0; --$y){
 			if($y <= $this->random->nextBoundedInt(5) || $y >= $worldHeightM1 - $this->random->nextBoundedInt(5)){
-				$this->level->setBlockAt($x, $y, $z, VanillaBlocks::BEDROCK());
+				$this->level->setBlockIdAt($x, $y, $z, VanillaBlocks::BEDROCK()->getId());
 				continue;
 			}
-			$mat = $this->level->getBlockAt($x, $y, $z)->getId();
+			$mat = $this->level->getBlockIdAt($x, $y, $z);
 			if($mat === BlockLegacyIds::AIR){
 				$deep = -1;
 			}elseif($mat === BlockLegacyIds::NETHERRACK){
@@ -253,13 +251,13 @@ class NetherGenerator extends VanillaGenerator
 
 					$deep = $surfaceHeight;
 					if($y >= 63){
-						$this->level->setBlockAt($x, $y, $z, $topMat);
+						$this->level->setBlockIdAt($x, $y, $z, $topMat->getId());
 					}else{
-						$this->level->setBlockAt($x, $y, $z, $groundMat);
+						$this->level->setBlockIdAt($x, $y, $z, $groundMat->getId());
 					}
 				}elseif($deep > 0){
 					--$deep;
-					$this->level->setBlockAt($x, $y, $z, $groundMat);
+					$this->level->setBlockIdAt($x, $y, $z, $groundMat->getId());
 				}
 			}
 		}
@@ -267,16 +265,16 @@ class NetherGenerator extends VanillaGenerator
 
 	public function getSettings(): array
 	{
-		return $this->settings;
+		return [];
 	}
 
 	public function getName(): string
 	{
-		return $this->name;
+		return "NetherGenerator";
 	}
 
 	public function getSpawn(): Vector3
 	{
-		return $this->spawn;
+		return new Vector3(0, 80, 0);
 	}
 }

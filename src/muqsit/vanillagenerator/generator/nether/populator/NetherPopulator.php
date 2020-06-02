@@ -10,9 +10,9 @@ use muqsit\vanillagenerator\generator\nether\decorator\MushroomDecorator;
 use muqsit\vanillagenerator\generator\Populator;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\utils\Random;
-use pocketmine\world\ChunkManager;
-use pocketmine\world\format\Chunk;
-use pocketmine\world\World;
+use pocketmine\level\ChunkManager;
+use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 
 class NetherPopulator implements Populator{
 
@@ -40,7 +40,7 @@ class NetherPopulator implements Populator{
 	/** @var MushroomDecorator */
 	private $redMushroomDecorator;
 
-	public function __construct(int $worldHeight = World::Y_MAX){
+	public function __construct(int $worldHeight = Level::Y_MAX){
 		$this->orePopulator = new OrePopulator($worldHeight);
 		$this->inGroundPopulators[] = $this->orePopulator;
 
