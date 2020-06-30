@@ -46,8 +46,8 @@ class MesaGroundGenerator extends GroundGenerator{
 	/** @noinspection PhpMissingParentConstructorInspection */
 	public function __construct(int $type = self::NORMAL){
 		$this->type = $type;
-		$this->topMaterial = VanillaBlocks::RED_SAND();
-		$this->groundMaterial = VanillaBlocks::ORANGE_STAINED_CLAY();
+		$this->topMaterial = BlockFactory::get(Block::SAND);
+		$this->groundMaterial = BlockFactory::get(Block::STAINED_CLAY);
 		$this->colorLayer = array_fill(0, 64, 0);
 	}
 

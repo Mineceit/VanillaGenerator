@@ -27,7 +27,7 @@ use pocketmine\utils\Random;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\format\Chunk;
 
-class BiomePopulator implements Populator
+class BiomePopulator extends Populator
 {
 
 	/** @var TreeDecoration[] */
@@ -202,20 +202,20 @@ class BiomePopulator implements Populator
 		return null;
 	}
 
-	public function populate(ChunkManager $world, Random $random, Chunk $chunk) : void{
-		$this->populateInGround($world, $random, $chunk);
-		$this->populateOnGround($world, $random, $chunk);
+	public function populate(ChunkManager $level, int $chunkX, int $chunkZ, Random $random) : void{
+		$this->populateInGround($level, $chunkX, $chunkZ, $random);
+		$this->populateOnGround($level, $chunkX, $chunkZ, $random);
 	}
 
-	protected function populateInGround(ChunkManager $world, Random $random, Chunk $chunk) : void{
+	protected function populateInGround(ChunkManager $level, int $chunkX, int $chunkZ, Random $random) : void{
 		foreach($this->inGroundPopulators as $populator){
-			$populator->populate($world, $random, $chunk);
+			$populator->populate($level, $chunkX, $chunkZ, $random);
 		}
 	}
 
-	protected function populateOnGround(ChunkManager $world, Random $random, Chunk $chunk) : void{
+	protected function populateOnGround(ChunkManager $level, int $chunkX, int $chunkZ, Random $random) : void{
 		foreach($this->onGroundPopulators as $populator){
-			$populator->populate($world, $random, $chunk);
+			$populator->populate($level, $chunkX, $chunkZ, $random);
 		}
 	}
 }

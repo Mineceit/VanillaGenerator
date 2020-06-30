@@ -75,17 +75,17 @@ class GroundGenerator{
 
 						$deep = $surfaceHeight;
 						if($y >= $seaLevel - 2){
-							$world->setBlockIdAt($x, $y, $z, $topMat);
+							$world->setBlockIdAt($x, $y, $z, BlockIds::GRASS);
 						}elseif($y < $seaLevel - 8 - $surfaceHeight){
 							$topMat = $air;
 							$groundMat = $stone;
 							$world->setBlockIdAt($x, $y, $z, $gravel);
 						}else{
-							$world->setBlockIdAt($x, $y, $z, $groundMat);
+							$world->setBlockIdAt($x, $y, $z, BlockIds::DIRT);
 						}
 					}elseif($deep > 0){
 						--$deep;
-						$world->setBlockIdAt($x, $y, $z, $groundMat);
+						$world->setBlockIdAt($x, $y, $z, BlockIds::DIRT);
 
 						if($deep === 0 && $groundMat === BlockIds::SAND){
 							$deep = $random->nextBoundedInt(4) + max(0, $y - $seaLevel - 1);

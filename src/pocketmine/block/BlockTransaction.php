@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace pocketmine\world;
 
 use pocketmine\block\Block;
+use pocketmine\level\ChunkManager;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Utils;
 
@@ -96,7 +97,7 @@ class BlockTransaction{
 			}
 		}
 		foreach($this->getBlocks() as [$x, $y, $z, $block]){
-			$this->world->setBlockAt($x, $y, $z, $block);
+			$this->world->setBlockIdAt($x, $y, $z, $block);
 		}
 		return true;
 	}

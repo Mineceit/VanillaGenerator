@@ -32,12 +32,30 @@ class NetherGenerator extends VanillaGenerator
 	private $density = [];
 
 	public function __construct(array $options = []){
-		parent::__construct($options);
+		if($this->random == null ||
+			!$this->random instanceof Random ) {
+			$this->random = new Random(mt_rand(0, 999999999));
+			$seed = $this->random->getSeed();
+		}else{
+			$seed = $this->random->getSeed();
+		}
+
+		parent::__construct($options, $seed);
+
 		$this->addPopulators(new NetherPopulator($this->level->getWorldHeight()));
 	}
 
 	public function getWorldHeight() : int{
 		return 128;
+	}
+
+	/**
+	 * @param ChunkManager $level
+	 * @param Random $random
+	 */
+	public function init(ChunkManager $level, Random $random): void
+	{
+		parent::init($level, $random);
 	}
 
 	protected function generateChunkData(int $chunkX, int $chunkZ, VanillaBiomeGrid $biomes) : void{

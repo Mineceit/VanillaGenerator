@@ -27,14 +27,14 @@ class IceDecorator extends Decorator{
 		];
 	}
 
-	public function populate(ChunkManager $world, Random $random, Chunk $chunk) : void{
-		$sourceX = $chunk->getX() << 4;
-		$sourceZ = $chunk->getZ() << 4;
+	public function populate(ChunkManager $world, int $chunkX, int $chunkZ, Random $random) : void{
+		$sourceX = $chunkX << 4;
+		$sourceZ = $chunkZ << 4;
 
 		for($i = 0; $i < 3; ++$i){
 			$x = $sourceX + $random->nextBoundedInt(16);
 			$z = $sourceZ + $random->nextBoundedInt(16);
-			$y = $chunk->getHighestBlockAt($x & 0x0f, $z & 0x0f) - 1;
+			$y = $world->getChunk($chunkX, $chunkZ)->getHighestBlockAt($x & 0x0f, $z & 0x0f) - 1;
 			while($y > 2 && $world->getBlockIdAt($x, $y, $z) === BlockIds::AIR){
 				--$y;
 			}
@@ -46,17 +46,19 @@ class IceDecorator extends Decorator{
 		for($i = 0; $i < 2; ++$i){
 			$x = $sourceX + $random->nextBoundedInt(16);
 			$z = $sourceZ + $random->nextBoundedInt(16);
-			$y = $chunk->getHighestBlockAt($x & 0x0f, $z & 0x0f);
+			$y = $world->getChunk($chunkX, $chunkZ)->getHighestBlockAt($x & 0x0f, $z & 0x0f);
 			while($y > 2 && $world->getBlockIdAt($x, $y, $z) === BlockIds::AIR){
 				--$y;
 			}
-			if($world->getBlockAt($x, $y, $z) === BlockIds::SNOW_BLOCK){
+			if($world->getBlockIdAt($x, $y, $z) === BlockIds::SNOW_BLOCK){
 				(new IceSpike())->generate($world, $random, $x, $y, $z);
 			}
 		}
 	}
 
-	public function decorate(ChunkManager $world, Random $random, Chunk $chunk) : void{
+	public function decorate(ChunkManager $world, Random $random, Chunk $chunk): void
+	{
+		// TODO: Implement decorate() method.
 	}
 }
 

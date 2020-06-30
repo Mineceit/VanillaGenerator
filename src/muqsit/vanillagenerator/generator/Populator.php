@@ -8,7 +8,7 @@ use pocketmine\utils\Random;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\format\Chunk;
 
-interface Populator
+abstract class Populator extends \pocketmine\level\generator\populator\Populator
 {
-	public function populate(ChunkManager $world, Random $random, Chunk $chunk) : void;
+	abstract function populate(ChunkManager $level, int $chunkX, int $chunkZ, Random $random);
 }

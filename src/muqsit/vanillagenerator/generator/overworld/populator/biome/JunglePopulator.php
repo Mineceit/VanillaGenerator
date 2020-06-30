@@ -14,9 +14,9 @@ use muqsit\vanillagenerator\generator\overworld\decorator\types\TreeDecoration;
 use pocketmine\utils\Random;
 use pocketmine\block\BlockTransaction;
 use pocketmine\level\ChunkManager;
-use pocketmine\world\format\Chunk;
+use pocketmine\level\format\Chunk;
 
-class JunglePopulator extends BiomePopulator{
+class JunglePopulator extends BiomePopulator {
 
 	/** @var TreeDecoration[] */
 	protected static $TREES;
@@ -40,7 +40,7 @@ class JunglePopulator extends BiomePopulator{
 
 	protected function initPopulators() : void{
 		$this->treeDecorator->setAmount(65);
-		$this->treeDecorator->setTrees(...self::$TREES);
+		$this->treeDecorator->setTrees(self::$TREES);
 		$this->flowerDecorator->setAmount(4);
 		$this->flowerDecorator->setFlowers(...self::$FLOWERS);
 		$this->tallGrassDecorator->setAmount(25);
@@ -51,23 +51,18 @@ class JunglePopulator extends BiomePopulator{
 		return [BiomeIds::JUNGLE, BiomeIds::JUNGLE_HILLS, BiomeIds::MUTATED_JUNGLE];
 	}
 
-	protected function populateOnGround(ChunkManager $world, Random $random, Chunk $chunk) : void{
-		$sourceX = $chunk->getX() << 4;
-		$sourceZ = $chunk->getZ() << 4;
+	protected function populateOnGround(ChunkManager $level, int $chunkX, int $chunkZ, Random $random) : void{
+		$sourceX = $chunkX << 4;
+		$sourceZ = $chunkZ << 4;
 
 		for($i = 0; $i < 7; ++$i){
 			$x = $sourceX + $random->nextBoundedInt(16);
 			$z = $sourceZ + $random->nextBoundedInt(16);
-			$y = $chunk->getHighestBlockAt($x & 0x0f, $z & 0x0f);
-			$delegate = new BlockTransaction($world);
-			$bush = new JungleBush($random, $delegate);
-			if($bush->generate($world, $random, $x, $y, $z)){
-				$delegate->apply();
-			}
+			$y = $level->getChunk($chunkX, $chunkZ)->getHighestBlockAt($x & 0x0f, $z & 0x0f);
 		}
 
-		parent::populateOnGround($world, $random, $chunk);
-		$this->melonDecorator->populate($world, $random, $chunk);
+		parent::populateOnGround($level, $chunkX, $chunkZ, $random);
+		$this->melonDecorator->populate($level, $chunkX, $chunkZ, $random);
 	}
 }
 

@@ -26,12 +26,13 @@ use muqsit\vanillagenerator\generator\overworld\populator\biome\SunflowerPlainsP
 use muqsit\vanillagenerator\generator\overworld\populator\biome\SwamplandPopulator;
 use muqsit\vanillagenerator\generator\overworld\populator\biome\TaigaPopulator;
 use muqsit\vanillagenerator\generator\Populator;
+use pocketmine\Server;
 use pocketmine\utils\Random;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\format\Chunk;
 use ReflectionClass;
 
-class OverworldPopulator implements Populator{
+class OverworldPopulator extends Populator{
 
 	/** @var Populator[] */
 	private $biomePopulators = []; // key = biomeId
@@ -70,10 +71,15 @@ class OverworldPopulator implements Populator{
 		*/
 	}
 
-	public function populate(ChunkManager $world, Random $random, Chunk $chunk) : void{
+	public function populate(ChunkManager $level, int $chunkX, int $chunkZ, Random $random) : void{
+		$chunk = $level->getChunk($chunkX, $chunkZ);
+		if(is_null($chunk)) {
+			return;
+		}
+
 		$biome = $chunk->getBiomeId(8, 8);
 		if(isset($this->biomePopulators[$biome])){
-			$this->biomePopulators[$biome]->populate($world, $random, $chunk);
+			$this->biomePopulators[$biome]->populate($level, $chunkX, $chunkZ, $random);
 		}
 	}
 

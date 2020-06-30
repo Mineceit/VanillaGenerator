@@ -67,19 +67,19 @@ class NetherPopulator implements Populator{
 	}
 
 	public function populate(ChunkManager $world, Random $random, Chunk $chunk) : void{
-		$this->populateInGround($world, $random, $chunk);
-		$this->populateOnGround($world, $random, $chunk);
+		$this->populateInGround($world, $chunk->getX(), $chunk->getZ(), $random);
+		$this->populateOnGround($world, $chunk->getX(), $chunk->getZ(), $random);
 	}
 
-	private function populateInGround(ChunkManager $world, Random $random, Chunk $chunk) : void{
+	private function populateInGround(ChunkManager $level, int $chunkX, int $chunkZ, Random $random) : void{
 		foreach($this->inGroundPopulators as $populator){
-			$populator->populate($world, $random, $chunk);
+			$populator->populate($level, $chunkX, $chunkZ, $random);
 		}
 	}
 
-	private function populateOnGround(ChunkManager $world, Random $random, Chunk $chunk) : void{
+	private function populateOnGround(ChunkManager $level, int $chunkX, int $chunkZ, Random $random) : void{
 		foreach($this->onGroundPopulators as $populator){
-			$populator->populate($world, $random, $chunk);
+			$populator->populate($level, $chunkX, $chunkZ, $random);
 		}
 	}
 }

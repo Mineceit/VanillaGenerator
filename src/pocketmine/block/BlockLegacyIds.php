@@ -26,10 +26,6 @@ namespace pocketmine\block;
 final class BlockLegacyIds
 {
 
-	private function __construct(){
-		//NOOP
-	}
-
 	public const AIR = 0;
 	public const STONE = 1;
 	public const GRASS = 2;

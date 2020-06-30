@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace muqsit\vanillagenerator\generator\overworld;
 
+use Ds\Vector;
 use muqsit\vanillagenerator\generator\ground\DirtAndStonePatchGroundGenerator;
 use muqsit\vanillagenerator\generator\ground\DirtPatchGroundGenerator;
 use muqsit\vanillagenerator\generator\ground\GravelPatchGroundGenerator;
@@ -25,6 +26,7 @@ use muqsit\vanillagenerator\generator\VanillaGenerator;
 use pocketmine\block\Block;
 use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockIds;
+use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
 use pocketmine\level\ChunkManager;
@@ -47,6 +49,8 @@ class OverworldGenerator extends VanillaGenerator
 	private $spawn = null;
 
 	public function init(ChunkManager $manager, Random $random) : void{
+		parent::init($manager, $random);
+
 		self::setBiomeSpecificGround(new SandyGroundGenerator(), BiomeIds::BEACH, BiomeIds::COLD_BEACH, BiomeIds::DESERT, BiomeIds::DESERT_HILLS, BiomeIds::MUTATED_DESERT);
 		self::setBiomeSpecificGround(new RockyGroundGenerator(), BiomeIds::STONE_BEACH);
 		self::setBiomeSpecificGround(new SnowyGroundGenerator(), BiomeIds::MUTATED_ICE_FLATS);
@@ -108,7 +112,15 @@ class OverworldGenerator extends VanillaGenerator
 	private $type = WorldType::NORMAL;
 
 	public function __construct(array $options = []){
-		parent::__construct($options);
+		if($this->random == null ||
+		!$this->random instanceof Random ) {
+			$this->random = new Random(mt_rand(0, 999999999));
+			$seed = $this->random->getSeed();
+		}else{
+			$seed = $this->random->getSeed();
+		}
+
+		parent::__construct($options, $seed);
 
 		$this->settings = $options;
 		$this->spawn = new Vector3(0, 80, 0);
@@ -380,18 +392,31 @@ class OverworldGenerator extends VanillaGenerator
 		}
 	}
 
+	/*
+	 * Abstract Functions
+	 */
+
+	/**
+	 * @return array
+	 */
 	public function getSettings(): array
 	{
-		return $this->settings;
+		return [];
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName(): string
 	{
-		return $this->name;
+		return "vanilla_normal";
 	}
 
+	/**
+	 * @return Vector3
+	 */
 	public function getSpawn(): Vector3
 	{
-		return $this->spawn;
+		return new Vector3(0, 80, 0);
 	}
 }

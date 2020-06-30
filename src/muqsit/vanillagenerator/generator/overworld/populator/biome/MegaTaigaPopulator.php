@@ -49,9 +49,9 @@ class MegaTaigaPopulator extends TaigaPopulator{
 		$this->taigaRedMushroomDecorator->setAmount(3);
 	}
 
-	protected function populateOnGround(ChunkManager $world, Random $random, Chunk $chunk) : void{
-		$this->stoneBoulderDecorator->populate($world, $random, $chunk);
-		parent::populateOnGround($world, $random, $chunk);
+	protected function populateOnGround(ChunkManager $level, int $chunkX, int $chunkZ, Random $random) : void{
+		$this->stoneBoulderDecorator->populate($level, $chunkX, $chunkZ, $random);
+		parent::populateOnGround($level, $chunkX, $chunkZ, $random);
 	}
 }
 

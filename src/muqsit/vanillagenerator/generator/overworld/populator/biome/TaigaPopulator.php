@@ -68,10 +68,10 @@ class TaigaPopulator extends BiomePopulator{
 		return [BiomeIds::TAIGA, BiomeIds::TAIGA_HILLS, BiomeIds::MUTATED_TAIGA, BiomeIds::TAIGA_COLD, BiomeIds::TAIGA_COLD_HILLS, BiomeIds::MUTATED_TAIGA_COLD];
 	}
 
-	protected function populateOnGround(ChunkManager $world, Random $random, Chunk $chunk) : void{
-		parent::populateOnGround($world, $random, $chunk);
-		$this->taigaBrownMushroomDecorator->populate($world, $random, $chunk);
-		$this->taigaRedMushroomDecorator->populate($world, $random, $chunk);
+	protected function populateOnGround(ChunkManager $level, int $chunkX, int $chunkZ, Random $random) : void{
+		parent::populateOnGround($level, $chunkX, $chunkZ, $random);
+		$this->taigaBrownMushroomDecorator->populate($level, $chunkX, $chunkZ, $random);
+		$this->taigaRedMushroomDecorator->populate($level, $chunkX, $chunkZ, $random);
 	}
 }
 TaigaPopulator::init();

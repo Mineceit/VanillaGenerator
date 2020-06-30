@@ -60,7 +60,7 @@ class PlainsPopulator extends BiomePopulator{
 		return [BiomeIds::PLAINS];
 	}
 
-	public function populateOnGround(ChunkManager $world, Random $random, Chunk $chunk) : void{
+	public function populateOnGround(ChunkManager $level, int $chunkX, int $chunkZ, Random $random) : void{
 		$sourceX = $chunk->getX() << 4;
 		$sourceZ = $chunk->getZ() << 4;
 
@@ -99,7 +99,7 @@ class PlainsPopulator extends BiomePopulator{
 			(new TallGrass(BlockFactory::get(BlockIds::TALL_GRASS)))->generate($world, $random, $x, $y, $z);
 		}
 
-		parent::populateOnGround($world, $random, $chunk);
+		parent::populateOnGround($level, $chunkX, $chunkZ, $random);
 	}
 }
 

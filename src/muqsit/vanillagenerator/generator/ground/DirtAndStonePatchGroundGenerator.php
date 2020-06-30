@@ -14,14 +14,14 @@ class DirtAndStonePatchGroundGenerator extends GroundGenerator{
 
 	public function generateTerrainColumn(ChunkManager $world, Random $random, int $x, int $z, int $biome, float $surfaceNoise) : void{
 		if($surfaceNoise > 1.75){
-			$this->setTopMaterial(BlockFactory::get(Block::STONE)->getId());
-			$this->setGroundMaterial(BlockFactory::get(Block::STONE)->getId());
+			$this->setTopMaterial(Block::STONE);
+			$this->setGroundMaterial(Block::STONE);
 		}elseif($surfaceNoise > -0.5){
-			$this->setTopMaterial(BlockFactory::get(Block::DIRT)->getId());
-			$this->setGroundMaterial(VanillaBlocks::DIRT()->getId());
+			$this->setTopMaterial(Block::DIRT);
+			$this->setGroundMaterial(Block::DIRT);
 		}else{
-			$this->setTopMaterial(VanillaBlocks::GRASS()->getId());
-			$this->setGroundMaterial(VanillaBlocks::DIRT()->getId());
+			$this->setTopMaterial(Block::GRASS);
+			$this->setGroundMaterial(Block::DIRT);
 		}
 
 		parent::generateTerrainColumn($world, $random, $x, $z, $biome, $surfaceNoise);

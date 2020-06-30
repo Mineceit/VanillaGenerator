@@ -6,3 +6,8 @@ authors: [Muqsit, Mineceit]
 github: https://github.com/Muqsit
 twitter: https://twitter.com/muqsitrayyan
 forum: https://forums.pmmp.io/members/muqsit.25/
+
+commands:
+  generators:
+    description: Lists the known generators
+    default: op

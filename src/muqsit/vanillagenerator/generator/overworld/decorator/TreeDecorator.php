@@ -40,18 +40,18 @@ class TreeDecorator extends Decorator{
 	/** @var TreeDecoration[] */
 	private $trees;
 
-	final public function setTrees(TreeDecoration ...$trees) : void{
+	final public function setTrees($trees) : void {
 		$this->trees = $trees;
 	}
 
-	public function populate(ChunkManager $world, Random $random, Chunk $chunk) : void{
+	public function populate(ChunkManager $level, int $chunkX, int $chunkZ, Random $random) : void{
 		$treeAmount = $this->amount;
 		if($random->nextBoundedInt(10) === 0){
 			++$treeAmount;
 		}
 
 		for($i = 0; $i < $treeAmount; ++$i){
-			$this->decorate($world, $random, $chunk);
+			$this->decorate($level, $random, $level->getChunk($chunkX, $chunkZ));
 		}
 	}
 

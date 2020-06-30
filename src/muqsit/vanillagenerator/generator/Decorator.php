@@ -8,7 +8,7 @@ use pocketmine\utils\Random;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\format\Chunk;
 
-abstract class Decorator implements Populator{
+abstract class Decorator extends \pocketmine\level\generator\populator\Populator {
 
 	/** @var int */
 	protected $amount = -PHP_INT_MAX;
@@ -19,9 +19,9 @@ abstract class Decorator implements Populator{
 
 	abstract public function decorate(ChunkManager $world, Random $random, Chunk $chunk) : void;
 
-	public function populate(ChunkManager $world, Random $random, Chunk $chunk) : void{
+	public function populate(ChunkManager $level, int $chunkX, int $chunkZ, Random $random) : void{
 		for($i = 0; $i < $this->amount; ++$i){
-			$this->decorate($world, $random, $chunk);
+			$this->decorate($level, $random, $level->getChunk($chunkX, $chunkZ));
 		}
 	}
 }

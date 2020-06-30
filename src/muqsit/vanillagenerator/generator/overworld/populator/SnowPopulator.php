@@ -11,18 +11,23 @@ use pocketmine\utils\Random;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\format\Chunk;
 
-class SnowPopulator implements Populator
+class SnowPopulator extends Populator
 {
 
-	public function populate(ChunkManager $world, Random $random, Chunk $chunk) : void{
-		$sourceX = $chunk->getX() << 4;
-		$sourceZ = $chunk->getZ() << 4;
+	public function populate(ChunkManager $level, int $chunkX, int $chunkZ, Random $random) : void{
+		$sourceX = $chunkX << 4;
+		$sourceZ = $chunkZ << 4;
+
+		if($level->getChunk($chunkX, $chunkZ) == null) {
+			return;
+		}
+
 		for($x = $sourceX; $x < $sourceX + 16; ++$x){
 			for($z = $sourceZ; $z < $sourceZ + 16; ++$z){
-				$y = $chunk->getHighestBlockAt($x & 0x0f, $z & 0x0f) - 1;
-				if(BiomeClimateManager::isSnowy($chunk->getBiomeId($x & 0x0f, $z & 0x0f), $x, $y, $z)){
-					$block = $world->getBlockIdAt($x, $y, $z);
-					$blockAbove = $world->getBlockIdAt($x, $y + 1, $z);
+				$y = $level->getChunk($chunkX, $chunkZ)->getHighestBlockAt($x & 0x0f, $z & 0x0f) - 1;
+				if(BiomeClimateManager::isSnowy($level->getChunk($chunkX, $chunkZ)->getBiomeId($x & 0x0f, $z & 0x0f), $x, $y, $z)){
+					$block = $level->getBlockIdAt($x, $y, $z);
+					$blockAbove = $level->getBlockIdAt($x, $y + 1, $z);
 					switch($block){
 						case BlockIds::WATER:
 						case BlockIds::STILL_WATER:
@@ -38,14 +43,14 @@ class SnowPopulator implements Populator
 						case BlockIds::STILL_LAVA:
 							break;
 						case BlockIds::DIRT:
-							$world->setBlockIdAt($x, $y, $z, BlockIds::GRASS);
+							$level->setBlockIdAt($x, $y, $z, BlockIds::GRASS);
 							if($blockAbove === BlockIds::AIR){
-								$world->setBlockIdAt($x, $y + 1, $z, BlockIds::SNOW_LAYER);
+								$level->setBlockIdAt($x, $y + 1, $z, BlockIds::SNOW_LAYER);
 							}
 							break;
 						default:
 							if($blockAbove === BlockIds::AIR){
-								$world->setBlockIdAt($x, $y + 1, $z, BlockIds::SNOW_LAYER);
+								$level->setBlockIdAt($x, $y + 1, $z, BlockIds::SNOW_LAYER);
 							}
 							break;
 					}
